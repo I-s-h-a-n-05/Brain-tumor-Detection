@@ -1,0 +1,39 @@
+# Model files (too large for GitHub)
+*.h5
+*.keras
+*.pb
+
+# Database (user data, don't commit)
+*.db
+*.sqlite
+
+# Dataset (too large)
+dataset/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+env/
+
+# Generated outputs
+confusion_matrix.png
+finetune_history.png
+finetune_v3_history.png
+metrics_report.txt
+brain_tumor_model_v3_history.png
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Misc scripts (not part of the app)
+make_test_dicom.py
+dicom_utils.py
+*.dcm

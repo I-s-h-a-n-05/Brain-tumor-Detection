@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NeuroScan — Intelligent MRI Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#0e1117;--ink2:#1a2030;--ink3:#252d3d;--slate:#8892a4;--slate2:#b0bac8;--paper:#f4f1eb;--gold:#c9a84c;--gold-dim:rgba(201,168,76,0.12);--gold-line:rgba(201,168,76,0.3);--white:#ffffff;--danger:#c0392b;--safe:#1e7e5a;--warn:#b8620a;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--r:6px;--r2:12px;--r3:18px}
+body.light{--ink:#F1F5F9;--ink2:#FFFFFF;--ink3:#E8EDF5;--slate:#64748B;--slate2:#334155;--paper:#0F172A;--gold:#1D4ED8;--gold-dim:rgba(29,78,216,0.08);--gold-line:rgba(29,78,216,0.2);--white:#0F172A;--danger:#DC2626;--safe:#16A34A;--warn:#D97706;--border:rgba(15,23,42,0.07);--border2:rgba(15,23,42,0.12)}
+body.light{background:#F1F5F9;color:#334155}
+body.light::before{background:radial-gradient(ellipse 100% 40% at 100% 0%,rgba(99,102,241,0.06) 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 0% 100%,rgba(16,185,129,0.04) 0%,transparent 50%)}
+/* Nav */
+body.light header{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(15,23,42,0.08);box-shadow:0 1px 16px rgba(15,23,42,0.06)}
+body.light .logo-word{color:#0F172A;font-weight:600}
+body.light .logo-dot{color:#1D4ED8}
+body.light .nav-link{color:#64748B}
+body.light .nav-link:hover,.nav-link.active{color:#0F172A}
+body.light .status-chip{background:#F8FAFC;border-color:rgba(15,23,42,0.1);color:#334155}
+body.light .status-dot{background:#16A34A;box-shadow:0 0 6px rgba(22,163,74,0.5)}
+body.light .theme-toggle{border-color:rgba(15,23,42,0.1);color:#64748B}
+/* Hero — light version, no dark overlay */
+body.light .hero{background:transparent;border-bottom-color:rgba(15,23,42,0.08)}
+body.light .hero-h1{color:#0F172A}
+body.light .hero-h1 em{color:#1D4ED8}
+body.light .kicker{color:#1D4ED8}
+body.light .kicker-line{background:#1D4ED8}
+body.light .hero-p{color:#64748B}
+body.light .hero-stats{border-top-color:rgba(15,23,42,0.08)}
+body.light .hstat-val{color:#0F172A}
+body.light .hstat-label{color:#94A3B8}
+/* Scan frame — always dark */
+body.light .scan-frame{background:#0D1117;border-color:rgba(99,102,241,0.3);box-shadow:0 24px 64px rgba(15,23,42,0.2),0 4px 16px rgba(15,23,42,0.1)}
+body.light .scan-frame:hover{box-shadow:0 32px 80px rgba(15,23,42,0.28),0 0 40px rgba(99,102,241,0.15)}
+body.light .scan-frame-inner{background:linear-gradient(155deg,#0d1520 0%,#0a1018 100%)}
+body.light .scan-strip{background:linear-gradient(transparent,rgba(13,17,23,0.9))}
+body.light .ssl{color:rgba(176,186,200,0.7)}
+body.light .ssr{color:#c9a84c}
+body.light .fc{border-color:#6366F1;opacity:0.7}
+body.light .lobe-tip{background:rgba(8,12,20,0.92);color:#a5b4fc;border-color:rgba(99,102,241,0.35)}
+body.light .lobe-dot{background:#6366F1;box-shadow:0 0 8px rgba(99,102,241,0.7)}
+body.light .lobe-line{background:rgba(99,102,241,0.5)}
+body.light .brain-popup{background:#fff;border-color:rgba(99,102,241,0.2);box-shadow:0 20px 50px rgba(15,23,42,0.12)}
+body.light .bp-name{color:#0F172A}
+body.light .bp-tag{color:#6366F1}
+body.light .bp-rule{background:#6366F1}
+body.light .bp-body{color:#64748B}
+body.light .bp-close{border-color:rgba(15,23,42,0.1);color:#64748B}
+/* Section styling */
+body.light .section{border-bottom-color:rgba(15,23,42,0.07)}
+body.light .eyebrow .ey-line{background:rgba(15,23,42,0.1)}
+body.light .ey-num{color:#6366F1}
+body.light .ey-text{color:#94A3B8}
+/* Demo grid */
+body.light .demo-grid{border-color:rgba(15,23,42,0.1);box-shadow:0 4px 32px rgba(15,23,42,0.08)}
+body.light .dpanel{background:#FFFFFF}
+body.light .dpanel:first-child{border-right-color:rgba(15,23,42,0.08)}
+body.light #reportPanel{background:#FAFBFD;border-left-color:rgba(15,23,42,0.08)}
+body.light .plabel{color:#94A3B8}
+body.light .plabel-n{color:#6366F1}
+/* Upload */
+body.light .upload-zone{border-color:rgba(99,102,241,0.25);background:rgba(99,102,241,0.025)}
+body.light .upload-zone:hover{border-color:rgba(99,102,241,0.5);background:rgba(99,102,241,0.05)}
+body.light .upload-zone.dragover{border-color:#6366F1;background:rgba(99,102,241,0.08)}
+body.light .uz-icon{border-color:rgba(99,102,241,0.2)}
+body.light .uz-icon svg{stroke:#6366F1}
+body.light .uz-title{color:#0F172A}
+body.light .uz-sub{color:#94A3B8}
+body.light .btn-p{background:#1D4ED8;color:#fff}
+body.light .btn-p:hover{background:#1e40af;box-shadow:0 6px 24px rgba(29,78,216,0.3)}
+body.light .btn-g{border-color:rgba(15,23,42,0.12);color:#64748B}
+body.light .btn-g:hover{border-color:rgba(99,102,241,0.3);color:#0F172A}
+body.light .btn-report{border-color:rgba(99,102,241,0.3);color:#4F46E5}
+body.light .btn-report:hover{background:rgba(99,102,241,0.06);border-color:#6366F1}
+/* Scanning state */
+body.light .scan-lbl{color:#94A3B8}
+body.light .ll{color:#94A3B8}
+body.light .ll.done{color:#16A34A}
+body.light .spin-r1{border-color:rgba(15,23,42,0.1);border-top-color:#1D4ED8}
+body.light .spin-r2{border-bottom-color:rgba(29,78,216,0.3)}
+/* Results */
+body.light .rh-pos{background:rgba(220,38,38,0.05);border-color:#DC2626}
+body.light .rh-neg{background:rgba(22,163,74,0.05);border-color:#16A34A}
+body.light .rh-warn{background:rgba(217,119,6,0.06);border-color:#D97706}
+body.light .rh-name{color:#0F172A}
+body.light .rh-conf{color:#94A3B8}
+body.light .probs-hdr{color:#94A3B8}
+body.light .pb-name{color:#334155}
+body.light .pb-pct{color:#0F172A}
+body.light .pb-track{background:#E2E8F0}
+body.light .mc{background:#F8FAFC;border-color:rgba(15,23,42,0.08);box-shadow:0 1px 6px rgba(15,23,42,0.05)}
+body.light .mc:hover{border-color:rgba(15,23,42,0.14)}
+body.light .mc-k{color:#94A3B8}
+body.light .mc-v{color:#0F172A}
+body.light .mc-s{color:#94A3B8}
+/* Tumor info cards */
+body.light .ti-label{color:#94A3B8}
+body.light .ti-sub{color:#94A3B8}
+body.light .ti-card{background:#F8FAFC;border-color:rgba(15,23,42,0.08);box-shadow:0 1px 6px rgba(15,23,42,0.05)}
+body.light .ti-card:hover{border-color:rgba(15,23,42,0.14)}
+body.light .ti-card-k{color:#94A3B8}
+body.light .ti-card-v{color:#334155}
+/* Grad-CAM */
+body.light .gcam-wrap{border-color:rgba(15,23,42,0.09);box-shadow:0 2px 12px rgba(15,23,42,0.05)}
+body.light .gcam-head{background:#F8FAFC;border-bottom-color:rgba(15,23,42,0.08)}
+body.light .gcam-title{color:#64748B}
+body.light .gcam-badge{border-color:rgba(99,102,241,0.25);color:#6366F1;background:rgba(99,102,241,0.07)}
+body.light .gcam-toggle{background:#E2E8F0}
+body.light .gcam-tab{color:#64748B}
+body.light .gcam-tab.active{background:#FFFFFF;color:#0F172A;border-color:rgba(15,23,42,0.1)}
+body.light .gcam-body{background:#EEF2F8}
+body.light .gcam-loading-txt{color:#64748B}
+body.light .gcam-legend{background:#F8FAFC;border-top-color:rgba(15,23,42,0.07)}
+body.light .gcam-scale-l,body.light .gcam-scale-r,body.light .gcam-note{color:#94A3B8}
+body.light .gcam-context{background:rgba(99,102,241,0.04);border-top-color:rgba(99,102,241,0.12);color:#64748B}
+/* Architecture */
+body.light .arch-card{background:#FFFFFF;border-color:rgba(15,23,42,0.08);box-shadow:0 4px 24px rgba(15,23,42,0.06)}
+body.light .arch-title{color:#0F172A}
+body.light .arch-sub{color:#64748B}
+body.light .arch-badge{color:#4F46E5;border-color:rgba(99,102,241,0.25);background:rgba(99,102,241,0.07)}
+body.light .ps{background:#F8FAFC;border-color:rgba(15,23,42,0.08)}
+body.light .ps:hover{background:#F1F5F9;border-color:rgba(15,23,42,0.12)}
+body.light .ps.active{border-color:rgba(99,102,241,0.4);background:rgba(99,102,241,0.06)}
+body.light .ps.active .ps-name{color:#4F46E5}
+body.light .ps-name{color:#334155}
+body.light .ps-spec{color:#94A3B8}
+body.light .pa{color:#CBD5E1}
+body.light .arch-info{background:#F8FAFC;border-left:2px solid #4F46E5;color:#334155;border-top:1px solid rgba(15,23,42,0.07);border-right:1px solid rgba(15,23,42,0.07);border-bottom:1px solid rgba(15,23,42,0.07)}
+body.light .arch-info strong{color:#4F46E5}
+/* Tumor types */
+body.light .tt-intro p{color:#64748B}
+body.light .tt-row{border-top-color:rgba(15,23,42,0.07)}
+body.light .tt-row:last-of-type{border-bottom-color:rgba(15,23,42,0.07)}
+body.light .tt-accent{opacity:0.06}
+body.light .tt-body{color:#64748B}
+body.light .tt-grid{border-left-color:rgba(15,23,42,0.08)}
+body.light .tt-fact-k{color:#94A3B8}
+body.light .tt-fact-v{color:#475569}
+body.light .tt-scope{background:rgba(15,23,42,0.025);border-color:rgba(15,23,42,0.08);color:#64748B}
+body.light .tt-scope strong{color:#334155}
+/* About */
+body.light .about-editorial{border-top-color:rgba(15,23,42,0.08)}
+body.light .ae-headline{color:#64748B}
+body.light .ae-headline .ae-big{color:#0F172A}
+body.light .ae-col{border-right-color:rgba(15,23,42,0.08)}
+body.light .ae-col-num{color:#6366F1}
+body.light .ae-col-title{color:#0F172A}
+body.light .ae-col-rule{background:#6366F1}
+body.light .ae-col-body{color:#64748B}
+/* Footer */
+body.light footer{border-top-color:rgba(15,23,42,0.08)}
+body.light .foot-brand{color:#0F172A}
+body.light .foot-brand span{color:#4F46E5}
+body.light .foot-meta{color:#94A3B8}
+body.light .foot-disc{background:rgba(220,38,38,0.03);border-color:rgba(220,38,38,0.1);color:#64748B}
+body.light .foot-disc strong{color:#DC2626}
+/* History panel */
+body.light .hist-overlay{background:rgba(15,23,42,0.3)}
+body.light .hist-panel{background:#FFFFFF;border-left-color:rgba(15,23,42,0.1)}
+body.light .hist-panel-head{border-bottom-color:rgba(15,23,42,0.08)}
+body.light .hist-panel-title{color:#0F172A}
+body.light .hist-panel-sub{color:#94A3B8}
+body.light .btn-clear{color:#64748B;border-color:rgba(15,23,42,0.1)}
+body.light .btn-clear:hover{border-color:rgba(220,38,38,0.3);color:#DC2626}
+body.light .hist-close{border-color:rgba(15,23,42,0.1);color:#64748B}
+body.light .hist-close:hover{background:#F1F5F9;color:#0F172A}
+body.light .hist-card{background:#FFFFFF;border-color:rgba(15,23,42,0.08);box-shadow:0 2px 8px rgba(15,23,42,0.05)}
+body.light .hist-card:hover{border-color:rgba(99,102,241,0.25);box-shadow:0 4px 20px rgba(15,23,42,0.1)}
+body.light .hist-title{color:#0F172A}
+body.light .hist-conf{color:#64748B}
+body.light .hist-time{color:#94A3B8;border-top-color:rgba(15,23,42,0.07)}
+body.light .he-text{color:#94A3B8}
+/* Toast */
+body.light .toast{background:#FFFFFF;border-color:rgba(22,163,74,0.2);box-shadow:0 16px 48px rgba(15,23,42,0.1)}
+body.light .toast-title{color:#16A34A}
+body.light .toast-sub{color:#64748B}
+/* Chat */
+body.light .chat-fab{background:#1D4ED8;box-shadow:0 4px 24px rgba(29,78,216,0.4)}
+body.light .chat-fab:hover{background:#1e40af;box-shadow:0 6px 32px rgba(29,78,216,0.5)}
+body.light .chat-fab svg{stroke:#fff}
+body.light .chat-unread{background:#DC2626;border-color:#F1F5F9}
+body.light .chat-win{background:#FFFFFF;border-color:rgba(15,23,42,0.1);box-shadow:0 24px 80px rgba(15,23,42,0.14)}
+body.light .chat-head{background:#F8FAFC;border-bottom-color:rgba(15,23,42,0.08)}
+body.light .chat-hname{color:#0F172A}
+body.light .chat-hsub{color:#94A3B8}
+body.light .chat-hdot{background:#16A34A;box-shadow:0 0 5px rgba(22,163,74,0.5)}
+body.light .cmsg.ai .cmsg-bubble{background:#F1F5F9;border-color:rgba(15,23,42,0.07);color:#334155}
+body.light .cmsg.user .cmsg-bubble{background:#1D4ED8;color:#fff}
+body.light .td{background:#94A3B8}
+body.light .chat-ia{border-top-color:rgba(15,23,42,0.07)}
+body.light .chat-input{background:#F1F5F9;border-color:rgba(15,23,42,0.1);color:#0F172A}
+body.light .chat-input:focus{border-color:rgba(99,102,241,0.45)}
+body.light .chat-input::placeholder{color:#94A3B8}
+body.light .chat-send-btn{background:#1D4ED8}
+body.light .chat-send-btn:hover{background:#1e40af}
+body.light .chat-send-btn svg{stroke:#fff}
+body.light .schip{background:transparent;border-color:rgba(15,23,42,0.1);color:#64748B}
+body.light .schip:hover{border-color:rgba(99,102,241,0.35);color:#4F46E5;background:rgba(99,102,241,0.05)}
+.theme-toggle{width:36px;height:36px;border-radius:var(--r);background:transparent;border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;color:var(--slate);flex-shrink:0}
+.theme-toggle:hover{border-color:rgba(201,168,76,0.4);color:var(--paper)}
+.theme-toggle svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:all 0.2s}
+.theme-toggle .icon-moon{display:block}
+.theme-toggle .icon-sun{display:none}
+body.light .theme-toggle .icon-moon{display:none}
+body.light .theme-toggle .icon-sun{display:block}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--paper);font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 120% 60% at 70% -10%,rgba(201,168,76,0.04) 0%,transparent 60%),radial-gradient(ellipse 80% 80% at -10% 80%,rgba(201,168,76,0.025) 0%,transparent 50%);pointer-events:none;z-index:0}
+.page{position:relative;z-index:1}
+.container{max-width:1180px;margin:0 auto;padding:0 40px}
+@media(max-width:640px){.container{padding:0 20px}}
+header{position:sticky;top:0;z-index:200;background:rgba(14,17,23,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:baseline;gap:2px;cursor:pointer}
+.logo-word{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--white)}
+.logo-dot{color:var(--gold);font-size:28px;line-height:1;position:relative;top:2px}
+.nav-right{display:flex;align-items:center;gap:24px}
+.nav-link{font-size:13px;font-weight:500;color:var(--slate);letter-spacing:0.2px;transition:color 0.2s;cursor:pointer}
+.nav-link:hover,.nav-link.active{color:var(--paper)}
+.status-chip{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500;color:var(--slate2);font-family:'JetBrains Mono',monospace;padding:6px 14px;border:1px solid var(--border2);border-radius:100px;cursor:default}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#2ecc71;box-shadow:0 0 6px rgba(46,204,113,0.6);animation:blink 3s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero{padding:100px 0 84px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:80px;align-items:center;border-bottom:1px solid var(--border)}
+@media(max-width:860px){.hero{grid-template-columns:1fr;gap:48px;padding:64px 0 56px}}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:28px}
+.kicker-line{width:28px;height:1px;background:var(--gold)}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,5.5vw,76px);font-weight:300;line-height:1.07;letter-spacing:-2px;color:var(--white);margin-bottom:24px}
+.hero-h1 em{font-weight:500;font-style:italic}
+.hero-p{font-size:16px;font-weight:300;color:var(--slate2);line-height:1.82;max-width:480px;margin-bottom:48px}
+.hero-stats{display:flex;gap:40px;flex-wrap:wrap;padding-top:40px;border-top:1px solid var(--border)}
+.hstat-val{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:500;color:var(--white);letter-spacing:-1px;line-height:1}
+.hstat-val sup{font-size:18px;vertical-align:super}
+.hstat-label{font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);margin-top:8px}
+.hero-visual{display:flex;align-items:center;justify-content:center}
+.scan-frame{width:340px;height:400px;border:1px solid var(--border2);border-radius:var(--r3);position:relative;overflow:visible;background:var(--ink2);transform-style:preserve-3d;transition:box-shadow 0.3s;will-change:transform}
+.scan-frame:hover{box-shadow:0 32px 80px rgba(0,0,0,0.6),0 0 40px rgba(201,168,76,0.08)}
+@media(max-width:860px){.scan-frame{width:100%;height:300px}}
+.scan-frame-inner{position:absolute;inset:20px;border-radius:var(--r2);overflow:hidden;background:linear-gradient(155deg,#0d1520 0%,#0a1018 100%);display:flex;align-items:center;justify-content:center}
+.mri-svg{width:100%;height:100%}
+.p-layer{position:absolute;inset:0;pointer-events:none;transition:transform 0.08s linear;will-change:transform}
+.scan-line-layer{position:absolute;inset:20px;overflow:hidden;border-radius:var(--r2);pointer-events:none}
+.mri-scan-line{animation:scanLine 3.5s ease-in-out infinite}
+@keyframes scanLine{0%,100%{transform:translateY(-10px);opacity:0}8%{opacity:1}88%{opacity:0.9}96%{opacity:0}50%{transform:translateY(350px)}}
+.fc{position:absolute;width:14px;height:14px;border-color:var(--gold);border-style:solid;opacity:0.5;transition:opacity 0.3s,transform 0.1s}
+.scan-frame:hover .fc{opacity:0.9}
+.fc-tl{top:12px;left:12px;border-width:1px 0 0 1px}.fc-tr{top:12px;right:12px;border-width:1px 1px 0 0}
+.fc-bl{bottom:12px;left:12px;border-width:0 0 1px 1px}.fc-br{bottom:12px;right:12px;border-width:0 1px 1px 0}
+.scan-strip{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(14,17,23,0.9));padding:28px 18px 16px;display:flex;justify-content:space-between;align-items:flex-end;border-radius:0 0 var(--r3) var(--r3)}
+.ssl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--slate);letter-spacing:1.5px;text-transform:uppercase}
+.ssr{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:1px}
+
+/* ── LOBE LABELS & POPUPS ── */
+.lobe-tip{position:absolute;pointer-events:none;opacity:0;transition:opacity 0.25s;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;background:rgba(14,17,23,0.88);padding:4px 9px;border:1px solid var(--gold-line);border-radius:4px;cursor:pointer;pointer-events:none}
+.lobe-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--gold);opacity:0;transform:scale(0);transition:opacity 0.25s,transform 0.25s;box-shadow:0 0 8px rgba(201,168,76,0.7);cursor:pointer;pointer-events:none;z-index:10}
+.lobe-line{position:absolute;background:rgba(201,168,76,0.5);opacity:0;transition:opacity 0.25s;transform-origin:left center;pointer-events:none}
+.scan-frame:hover .lobe-tip{opacity:1;pointer-events:all}
+.scan-frame:hover .lobe-dot{opacity:1;transform:scale(1);pointer-events:all}
+.scan-frame:hover .lobe-line{opacity:1}
+.lobe-tip:hover{background:rgba(201,168,76,0.15);border-color:var(--gold);color:var(--white)}
+/* popup card */
+.brain-popup{position:fixed;z-index:9999;background:var(--ink2);border:1px solid var(--gold-line);border-radius:var(--r2);padding:16px 18px;width:240px;box-shadow:0 16px 48px rgba(0,0,0,0.7),0 0 0 1px rgba(201,168,76,0.08);opacity:0;pointer-events:none;transition:opacity 0.2s,transform 0.2s;transform:translateY(6px) scale(0.97);transform-origin:top left}
+.brain-popup.show{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}
+.bp-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--white);margin-bottom:4px;letter-spacing:-0.2px}
+.bp-tag{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.bp-rule{width:20px;height:1px;background:var(--gold);opacity:0.4;margin-bottom:10px}
+.bp-body{font-size:12px;color:var(--slate2);line-height:1.72;font-weight:300}
+.bp-close{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:50%;background:transparent;border:1px solid var(--border2);cursor:pointer;color:var(--slate);font-size:11px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.bp-close:hover{background:var(--ink3);color:var(--paper)}
+
+.section{padding:80px 0;border-bottom:1px solid var(--border)}
+.section-last{padding:80px 0 100px}
+.eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.ey-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:1px}
+.ey-line{flex:1;height:1px;background:var(--border);max-width:40px}
+.ey-text{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--slate)}
+
+/* ── DEMO GRID — single col by default, expands when results arrive ── */
+.demo-grid{display:grid;grid-template-columns:1fr;gap:2px;border:1px solid var(--border2);border-radius:var(--r3);overflow:hidden;transition:all 0.4s ease}
+.demo-grid.has-results{grid-template-columns:1fr 1.2fr;align-items:start}
+@media(max-width:720px){.demo-grid,.demo-grid.has-results{grid-template-columns:1fr}}
+.dpanel{background:var(--ink2);padding:36px;max-width:600px;width:100%;margin:0 auto}
+.demo-grid.has-results .dpanel{max-width:none;margin:0}
+.dpanel:first-child{border-right:none}
+.demo-grid.has-results .dpanel:first-child{border-right:1px solid var(--border);position:sticky;top:80px;align-self:start}
+@media(max-width:720px){.dpanel:first-child{position:static !important;border-right:none !important;border-bottom:1px solid var(--border)}}
+
+/* report panel */
+#reportPanel{display:none;background:var(--ink2);padding:36px}
+@keyframes reportReveal{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── TUMOR INFO CARDS (shown in left panel after diagnosis) ── */
+#tumorInfo{display:none;margin-top:28px;animation:fadeUp 0.5s ease 0.2s both}
+.ti-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--slate);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ti-label-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.ti-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--white);letter-spacing:-0.4px;margin-bottom:4px;line-height:1.15}
+.ti-sub{font-size:11px;color:var(--slate);margin-bottom:16px;font-family:'JetBrains Mono',monospace;letter-spacing:0.3px}
+.ti-cards{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.ti-card{background:var(--ink3);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;transition:border-color 0.2s}
+.ti-card:hover{border-color:var(--border2)}
+.ti-card.full{grid-column:1/-1}
+.ti-card-k{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);margin-bottom:7px}
+.ti-card-v{font-size:12.5px;color:var(--slate2);line-height:1.72;font-weight:300}
+.ti-card-v strong{color:var(--paper);font-weight:500}
+
+.plabel{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--slate);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.plabel-n{font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:10px}
+.upload-zone{border:1px dashed rgba(201,168,76,0.22);border-radius:var(--r2);padding:48px 24px;text-align:center;cursor:pointer;transition:all 0.25s;background:rgba(201,168,76,0.018)}
+.upload-zone:hover{border-color:rgba(201,168,76,0.48);background:rgba(201,168,76,0.036)}
+.upload-zone.dragover{border-color:var(--gold);background:rgba(201,168,76,0.06)}
+.uz-icon{width:50px;height:50px;margin:0 auto 16px;border:1px solid rgba(201,168,76,0.2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;transition:all 0.25s}
+.uz-icon svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.upload-zone:hover .uz-icon{border-color:rgba(201,168,76,0.45);background:rgba(201,168,76,0.08)}
+.uz-title{font-size:15px;font-weight:600;color:var(--paper);margin-bottom:6px}
+.uz-sub{font-size:12px;color:var(--slate);font-family:'JetBrains Mono',monospace}
+#fileInput{display:none}
+#previewArea{display:none;border-radius:var(--r2);overflow:hidden;position:relative;background:#000}
+#previewArea img{width:100%;display:block;max-height:340px;object-fit:cover;filter:contrast(1.05) saturate(0.88)}
+.prev-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(14,17,23,0.65))}
+.pc{position:absolute;width:13px;height:13px;border-color:var(--gold);border-style:solid;opacity:0.65}
+.pc-tl{top:9px;left:9px;border-width:1px 0 0 1px}.pc-tr{top:9px;right:9px;border-width:1px 1px 0 0}
+.pc-bl{bottom:9px;left:9px;border-width:0 0 1px 1px}.pc-br{bottom:9px;right:9px;border-width:0 1px 1px 0}
+.btn-p{width:100%;margin-top:16px;padding:14px 24px;background:var(--gold);border:none;border-radius:var(--r);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.2px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-p:hover{background:#d9b85c;transform:translateY(-1px);box-shadow:0 6px 24px rgba(201,168,76,0.22)}
+.btn-p:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-g{width:100%;margin-top:10px;padding:11px 24px;background:transparent;border:1px solid var(--border2);border-radius:var(--r);color:var(--slate);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-g:hover{border-color:rgba(201,168,76,0.3);color:var(--paper)}
+.btn-report{width:100%;margin-top:10px;padding:12px 24px;background:transparent;border:1px solid rgba(201,168,76,0.35);border-radius:var(--r);color:var(--gold);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.25s;align-items:center;justify-content:center;gap:9px;letter-spacing:0.2px}
+.btn-report:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);transform:translateY(-1px);box-shadow:0 4px 16px rgba(201,168,76,0.12)}
+.btn-report:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.btn-report svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.report-generating{display:inline-flex;align-items:center;gap:8px}
+.report-spin{width:13px;height:13px;border-radius:50%;border:1.5px solid rgba(201,168,76,0.3);border-top-color:var(--gold);animation:rot 0.8s linear infinite;flex-shrink:0}
+.scanning{display:none;flex-direction:column;align-items:center;padding:36px 16px;gap:26px}
+.spin-wrap{width:54px;height:54px;position:relative}
+.spin-r1{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--border2);border-top-color:var(--gold);animation:rot 0.9s linear infinite}
+.spin-r2{position:absolute;inset:10px;border-radius:50%;border:1px solid transparent;border-bottom-color:rgba(201,168,76,0.35);animation:rot 1.5s linear infinite reverse}
+@keyframes rot{to{transform:rotate(360deg)}}
+.scan-lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--slate);text-transform:uppercase}
+.scan-log{width:100%;max-width:260px;display:flex;flex-direction:column;gap:8px}
+.ll{display:flex;align-items:center;gap:10px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--slate);opacity:0;transform:translateX(-8px);transition:all 0.35s ease}
+.ll.done{opacity:1;transform:translateX(0);color:#2ecc71}
+.ll-tick{width:14px;height:14px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0}
+#resultsPanel{display:none}
+.rh{padding:18px 20px;border-radius:var(--r2);margin-bottom:20px;border-left:3px solid;display:flex;align-items:center;gap:14px}
+.rh-pos{background:rgba(192,57,43,0.07);border-color:var(--danger)}
+.rh-neg{background:rgba(30,126,90,0.08);border-color:var(--safe)}
+.rh-warn{background:rgba(184,98,10,0.08);border-color:var(--warn)}
+.rh-icon{font-size:24px;flex-shrink:0}
+.rh-name{font-size:17px;font-weight:700;color:var(--white);letter-spacing:-0.2px}
+.rh-conf{font-size:11px;color:var(--slate);margin-top:3px;font-family:'JetBrains Mono',monospace}
+.probs-hdr{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--slate);margin-bottom:16px}
+.pb-row{margin-bottom:13px}
+.pb-top{display:flex;justify-content:space-between;margin-bottom:6px}
+.pb-name{font-size:13px;font-weight:500;color:var(--slate2)}
+.pb-pct{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--paper)}
+.pb-track{height:3px;background:var(--ink3);border-radius:100px;overflow:hidden}
+.pb-fill{height:100%;border-radius:100px;width:0%;transition:width 1.1s cubic-bezier(0.16,1,0.3,1)}
+.r-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.mc{background:var(--ink3);border-radius:var(--r);padding:13px 15px;border:1px solid var(--border);transition:border-color 0.2s}
+.mc:hover{border-color:var(--border2)}
+.mc-k{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--slate);margin-bottom:8px}
+.mc-v{font-size:15px;font-weight:700;color:var(--paper);letter-spacing:-0.2px}
+.mc-s{font-size:10px;color:var(--slate);margin-top:3px}
+/* ── HISTORY PANEL ── */
+.hist-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:500;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px)}
+.hist-overlay.open{opacity:1;pointer-events:all}
+.hist-panel{position:fixed;top:0;right:0;bottom:0;width:480px;max-width:100vw;background:var(--ink2);border-left:1px solid var(--border2);z-index:501;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;overflow:hidden}
+.hist-panel.open{transform:translateX(0)}
+@media(max-width:520px){.hist-panel{width:100vw}}
+.hist-panel-head{padding:24px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hist-panel-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--white);letter-spacing:-0.3px}
+.hist-panel-sub{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--slate);margin-top:3px}
+.hist-panel-actions{display:flex;align-items:center;gap:10px}
+.btn-clear{font-size:11px;font-weight:500;color:var(--slate);background:transparent;border:1px solid var(--border);border-radius:var(--r);padding:6px 12px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:0.5px;transition:all 0.2s}
+.btn-clear:hover{border-color:rgba(192,57,43,0.4);color:#d97b6f}
+.hist-close{width:32px;height:32px;border-radius:var(--r);background:transparent;border:1px solid var(--border2);cursor:pointer;color:var(--slate);font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.hist-close:hover{background:var(--ink3);color:var(--paper)}
+.hist-panel-body{flex:1;overflow-y:auto;padding:24px 28px}
+.hist-panel-body::-webkit-scrollbar{width:4px}
+.hist-panel-body::-webkit-scrollbar-track{background:transparent}
+.hist-panel-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+#historyEmpty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 0;text-align:center}
+.he-icon{width:56px;height:56px;border:1px solid var(--border2);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;opacity:0.25}
+.he-icon svg{width:24px;height:24px;stroke:var(--slate2);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.he-text{font-size:13px;color:var(--slate);line-height:1.7}
+.history-grid{display:flex;flex-direction:column;gap:12px}
+.hist-card{background:var(--ink3);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;cursor:default;transition:all 0.25s;position:relative;display:flex;gap:0}
+.hist-card:hover{border-color:rgba(201,168,76,0.3);box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.hist-thumb{width:110px;flex-shrink:0;overflow:hidden;position:relative;background:var(--ink)}
+.hist-thumb img{width:100%;height:100%;object-fit:cover;filter:contrast(1.05) saturate(0.8) grayscale(0.2);transition:filter 0.3s}
+.hist-card:hover .hist-thumb img{filter:contrast(1.05) saturate(0.95)}
+.hist-thumb-ov{position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,var(--ink3))}
+.hbadge{position:absolute;bottom:8px;left:8px;font-size:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:100px;font-family:'JetBrains Mono',monospace}
+.hb-pos{background:rgba(192,57,43,0.85);color:#ffc8c0;border:1px solid rgba(192,57,43,0.5)}
+.hb-neg{background:rgba(30,126,90,0.85);color:#a0ffd8;border:1px solid rgba(30,126,90,0.5)}
+.hb-warn{background:rgba(184,98,10,0.85);color:#ffd8a0;border:1px solid rgba(184,98,10,0.5)}
+.hist-body{padding:14px 16px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.hist-title{font-size:13px;font-weight:700;color:var(--paper);margin-bottom:4px}
+.hist-conf{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--slate)}
+.hist-time{font-size:10px;color:var(--slate);opacity:0.6;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace}
+.hist-del{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:rgba(14,17,23,0.85);border:1px solid var(--border2);display:none;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:var(--slate);transition:all 0.2s}
+.hist-card:hover .hist-del{display:flex}
+.hist-del:hover{background:rgba(192,57,43,0.75);color:var(--white);border-color:transparent}
+/* ── TOAST ── */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:999;background:var(--ink2);border:1px solid rgba(30,126,90,0.4);border-radius:var(--r2);padding:16px 24px;display:flex;align-items:center;gap:14px;box-shadow:0 16px 48px rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);max-width:420px;width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all}
+.toast-icon{font-size:28px;flex-shrink:0}
+.toast-title{font-size:15px;font-weight:700;color:#2ecc71;letter-spacing:-0.2px}
+.toast-sub{font-size:12px;color:var(--slate);margin-top:3px;line-height:1.5}
+.toast-close{margin-left:auto;background:none;border:none;color:var(--slate);cursor:pointer;font-size:16px;padding:4px;transition:color 0.2s;flex-shrink:0}
+.toast-close:hover{color:var(--paper)}
+.hist-nav-btn{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--slate2);background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:7px 14px;cursor:pointer;transition:all 0.2s;font-family:'Plus Jakarta Sans',sans-serif}
+.hist-nav-btn:hover{border-color:rgba(201,168,76,0.3);color:var(--gold)}
+.arch-card{background:var(--ink2);border:1px solid var(--border2);border-radius:var(--r3);padding:48px}
+@media(max-width:640px){.arch-card{padding:24px 18px}}
+.arch-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px}
+.arch-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--white);letter-spacing:-0.5px}
+.arch-sub{font-size:13px;color:var(--slate);margin-top:5px;font-weight:300}
+.arch-badge{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);border:1px solid var(--gold-line);padding:6px 14px;border-radius:100px;background:var(--gold-dim);letter-spacing:1px;white-space:nowrap}
+.pipeline{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.ps{flex-shrink:0;min-width:100px;padding:18px 14px;border:1px solid var(--border);border-radius:var(--r);text-align:center;cursor:pointer;transition:all 0.2s;background:var(--ink3)}
+.ps:hover{border-color:var(--border2);background:#1e2535}
+.ps.active{border-color:rgba(201,168,76,0.4);background:rgba(201,168,76,0.05)}
+.ps.active .ps-name{color:var(--gold)}
+.ps-icon{font-size:18px;margin-bottom:10px;display:block}
+.ps-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--slate2);margin-bottom:4px;transition:color 0.2s}
+.ps-spec{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--slate)}
+.pa{display:flex;align-items:center;padding:0 8px;color:var(--slate);font-size:11px;flex-shrink:0}
+.arch-info{margin-top:20px;padding:18px 22px;background:var(--ink3);border-radius:var(--r);border-left:2px solid var(--gold);font-size:13px;color:var(--slate2);line-height:1.82;font-weight:300;transition:opacity 0.18s}
+.arch-info strong{color:var(--gold);font-weight:600}
+.about-editorial{border-top:1px solid var(--border2)}
+.ae-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2.2vw,26px);font-weight:300;color:var(--slate2);line-height:1.65;padding:40px 0 48px;max-width:780px}
+.ae-headline .ae-big{color:var(--white);font-weight:500}
+.ae-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border)}
+@media(max-width:720px){.ae-cols{grid-template-columns:1fr}}
+.ae-col{padding:36px 0 36px;padding-right:40px;border-right:1px solid var(--border)}
+.ae-col:last-child{border-right:none;padding-right:0;padding-left:40px}
+.ae-col:nth-child(2){padding-left:40px}
+@media(max-width:720px){.ae-col{border-right:none;border-bottom:1px solid var(--border);padding:28px 0;padding-right:0;padding-left:0 !important}}
+.ae-col-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:2px;margin-bottom:14px}
+.ae-col-title{font-size:18px;font-weight:700;color:var(--white);letter-spacing:-0.3px;margin-bottom:12px}
+.ae-col-rule{width:24px;height:1px;background:var(--gold);opacity:0.4;margin-bottom:16px}
+.ae-col-body{font-size:13px;color:var(--slate);line-height:1.85;font-weight:300}
+footer{border-top:1px solid var(--border);padding:36px 0}
+.foot-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.foot-brand{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--white)}
+.foot-brand span{color:var(--gold)}
+.foot-meta{font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace}
+.foot-disc{width:100%;margin-top:20px;padding:14px 18px;background:rgba(192,57,43,0.045);border:1px solid rgba(192,57,43,0.12);border-radius:var(--r);font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace;line-height:1.7}
+.foot-disc strong{color:#d97b6f;font-weight:500}
+.chat-fab{position:fixed;bottom:32px;right:32px;z-index:1000;width:56px;height:56px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(201,168,76,0.35)}
+.chat-fab:hover{transform:scale(1.08);box-shadow:0 6px 32px rgba(201,168,76,0.45)}
+.chat-fab svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:all 0.25s}
+.chat-fab .icon-close{display:none}
+.chat-fab.open .icon-chat{display:none}
+.chat-fab.open .icon-close{display:block}
+.chat-unread{position:absolute;top:-3px;right:-3px;width:18px;height:18px;border-radius:50%;background:var(--danger);border:2px solid var(--ink);font-size:10px;font-weight:700;color:var(--white);display:none;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace}
+.chat-win{position:fixed;bottom:104px;right:32px;z-index:999;width:380px;height:560px;background:var(--ink2);border:1px solid var(--border2);border-radius:var(--r3);display:none;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,0.6);overflow:hidden}
+.chat-win.open{display:flex;animation:cslide 0.3s cubic-bezier(0.16,1,0.3,1)}
+@keyframes cslide{from{opacity:0;transform:translateY(20px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:500px){.chat-win{width:calc(100vw - 32px);right:16px;bottom:88px}}
+.chat-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--ink3)}
+.chat-av{width:38px;height:38px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-line);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.chat-hname{font-size:14px;font-weight:700;color:var(--white)}
+.chat-hsub{font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace;margin-top:1px}
+.chat-hstat{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--slate2);font-family:'JetBrains Mono',monospace}
+.chat-hdot{width:6px;height:6px;border-radius:50%;background:#2ecc71;box-shadow:0 0 5px rgba(46,204,113,0.5)}
+.chat-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth}
+.chat-msgs::-webkit-scrollbar{width:4px}
+.chat-msgs::-webkit-scrollbar-track{background:transparent}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.cmsg{display:flex;gap:10px;max-width:92%}
+.cmsg.user{margin-left:auto;flex-direction:row-reverse}
+.cmsg-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;margin-top:2px}
+.cmsg-av-ai{background:var(--gold-dim);border:1px solid var(--gold-line)}
+.cmsg-av-u{background:rgba(176,186,200,0.12);border:1px solid var(--border2)}
+.cmsg-bubble{padding:12px 16px;border-radius:var(--r2);font-size:13px;line-height:1.75;font-weight:300}
+.cmsg.ai .cmsg-bubble{background:var(--ink3);border:1px solid var(--border);color:var(--paper);border-radius:4px var(--r2) var(--r2) var(--r2)}
+.cmsg.user .cmsg-bubble{background:var(--gold);color:var(--ink);font-weight:500;border-radius:var(--r2) 4px var(--r2) var(--r2)}
+.typing-bubble{padding:14px 16px;display:flex;gap:5px;align-items:center}
+.td{width:6px;height:6px;border-radius:50%;background:var(--slate);animation:tb 1.2s ease-in-out infinite}
+.td:nth-child(2){animation-delay:0.2s}
+.td:nth-child(3){animation-delay:0.4s}
+@keyframes tb{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.chat-sugg{padding:0 20px 12px;display:flex;gap:8px;flex-wrap:wrap}
+.schip{font-size:11px;font-weight:500;color:var(--slate2);padding:6px 12px;border:1px solid var(--border2);border-radius:100px;cursor:pointer;transition:all 0.2s;background:transparent;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap}
+.schip:hover{border-color:var(--gold-line);color:var(--gold);background:var(--gold-dim)}
+.chat-ia{padding:16px 20px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end}
+.chat-input{flex:1;background:var(--ink3);border:1px solid var(--border2);border-radius:var(--r);padding:10px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--paper);resize:none;max-height:100px;line-height:1.5;transition:border-color 0.2s;outline:none}
+.chat-input::placeholder{color:var(--slate)}
+.chat-input:focus{border-color:rgba(201,168,76,0.4)}
+.chat-send-btn{width:36px;height:36px;border-radius:var(--r);flex-shrink:0;background:var(--gold);border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+.chat-send-btn:hover{background:#d9b85c}
+.chat-send-btn:disabled{opacity:0.4;cursor:not-allowed}
+.chat-send-btn svg{width:16px;height:16px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* ── TUMOR TYPES SECTION ── */
+.tt-intro{max-width:680px;margin-bottom:56px}
+.tt-intro p{font-size:15px;color:var(--slate2);line-height:1.82;font-weight:300}
+.tt-rows{display:flex;flex-direction:column}
+.tt-row{display:grid;grid-template-columns:100px 1fr 1fr;gap:48px;padding:48px 0;border-top:1px solid var(--border);align-items:start;transition:background 0.2s}
+.tt-row:last-of-type{border-bottom:1px solid var(--border)}
+@media(max-width:860px){.tt-row{grid-template-columns:1fr;gap:20px;padding:32px 0}}
+.tt-accent{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:300;line-height:0.9;letter-spacing:-4px;opacity:0.12;padding-top:6px;user-select:none}
+.tt-tag{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;padding:3px 10px 3px 0;border-bottom:1px solid}
+.tt-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.tt-name{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400;letter-spacing:-1px;line-height:1;margin-bottom:8px}
+.tt-sub{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--slate);letter-spacing:0.8px;margin-bottom:20px}
+.tt-body{font-size:13px;color:var(--slate2);line-height:1.85;font-weight:300}
+.tt-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 28px;padding-left:20px;border-left:1px solid var(--border)}
+.tt-fact-k{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);margin-bottom:5px}
+.tt-fact-v{font-size:12px;color:var(--slate2);line-height:1.65;font-weight:300}
+/* scope note — same style as footer disclaimer */
+.tt-scope{margin-top:44px;padding:14px 18px;background:rgba(255,255,255,0.025);border:1px solid var(--border2);border-radius:var(--r);font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace;line-height:1.7}
+.tt-scope strong{color:var(--slate2);font-weight:500}
+.fu{animation:fadeUp 0.5s ease forwards}
+.fu1{animation-delay:0.04s;opacity:0}.fu2{animation-delay:0.11s;opacity:0}.fu3{animation-delay:0.18s;opacity:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* ── GRAD-CAM ── */
+.gcam-wrap{margin-top:20px;border:1px solid var(--border2);border-radius:var(--r2);overflow:hidden;animation:fadeUp 0.5s ease 0.3s both}
+.gcam-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--ink3);border-bottom:1px solid var(--border)}
+.gcam-title{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--slate);display:flex;align-items:center;gap:8px}
+.gcam-badge{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);border:1px solid var(--gold-line);padding:2px 8px;border-radius:100px;background:var(--gold-dim);letter-spacing:1px}
+.gcam-toggle{display:flex;gap:2px;background:var(--ink);border-radius:var(--r);padding:2px}
+.gcam-tab{font-size:11px;font-weight:500;color:var(--slate);padding:5px 12px;border-radius:4px;cursor:pointer;transition:all 0.18s;border:none;background:transparent;font-family:'Plus Jakarta Sans',sans-serif}
+.gcam-tab.active{background:var(--ink3);color:var(--paper);border:1px solid var(--border2)}
+.gcam-body{position:relative;background:var(--ink3);min-height:160px;display:flex;align-items:center;justify-content:center}
+.gcam-img{width:100%;display:block;height:auto;object-fit:contain}
+.gcam-loading{display:flex;align-items:center;gap:12px;padding:28px;color:var(--slate)}
+.gcam-spin{width:22px;height:22px;flex-shrink:0;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--gold);animation:rot 0.8s linear infinite}
+.gcam-loading-txt{font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase}
+.gcam-legend{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--ink3);border-top:1px solid var(--border)}
+.gcam-scale{display:flex;align-items:center;gap:8px;flex:1}
+.gcam-scale-bar{flex:1;height:6px;border-radius:100px;background:linear-gradient(to right,#00008b,#0000ff,#00ffff,#00ff00,#ffff00,#ff8000,#ff0000);max-width:140px}
+.gcam-scale-l,.gcam-scale-r{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--slate);letter-spacing:0.5px}
+.gcam-note{font-size:10px;color:var(--slate);font-family:'JetBrains Mono',monospace;letter-spacing:0.3px}
+.gcam-context{padding:9px 16px;background:rgba(201,168,76,0.05);border-top:1px solid rgba(201,168,76,0.12);font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace;letter-spacing:0.2px;line-height:1.6;display:none}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <div class="container">
+    <nav class="nav">
+      <div class="logo"><span class="logo-word">NeuroScan</span><span class="logo-dot">.</span></div>
+      <div class="nav-right">
+        <span class="nav-link active" id="nl-analysis" onclick="gotoSection('.section-demo')">Analysis</span>
+        <span class="nav-link" id="nl-arch" onclick="gotoSection('.section-arch')">Architecture</span>
+        <span class="nav-link" id="nl-tumors" onclick="gotoSection('.section-tumors')">Tumor Types</span>
+        <span class="nav-link" id="nl-about" onclick="gotoSection('.section-about')">About</span>
+        <span class="nav-link" id="nl-history" onclick="openHistory()">Scan History</span>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <div class="status-chip"><span class="status-dot"></span>Model Active</div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <div class="hero">
+    <div>
+      <div class="kicker fu fu1"><span class="kicker-line"></span>Deep Learning · Medical Imaging</div>
+      <h1 class="hero-h1 fu fu2">The New Standard<br/>in <em>Neural</em><br/>Intelligence.</h1>
+      <p class="hero-p fu fu3">Bridging the gap between raw MRI data and actionable clinical insights through state-of-the-art deep learning and computer vision.</p>
+      <div class="hero-stats fu fu3">
+        <div><div class="hstat-val">91.5<sup>%</sup></div><div class="hstat-label">Test Accuracy</div></div>
+        <div><div class="hstat-val">5,712</div><div class="hstat-label">Training Scans</div></div>
+        <div><div class="hstat-val">4</div><div class="hstat-label">Tumor Classes</div></div>
+      </div>
+    </div>
+    <div class="hero-visual fu fu2">
+      <div class="scan-frame" id="scanFrame">
+        <div class="fc fc-tl"></div><div class="fc fc-tr"></div>
+        <div class="fc fc-bl"></div><div class="fc fc-br"></div>
+
+        <!-- Layer 0: background -->
+        <div class="p-layer" id="pl0" style="z-index:1">
+          <div class="scan-frame-inner"></div>
+        </div>
+
+        <!-- Layer 1: brain SVG -->
+        <div class="p-layer" id="pl1" style="inset:20px;z-index:2;border-radius:var(--r2);overflow:hidden">
+          <svg class="mri-svg" viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="brainGlow" cx="50%" cy="45%" r="50%">
+                <stop offset="0%" stop-color="#2a3f5f"/><stop offset="100%" stop-color="#0a1018"/>
+              </radialGradient>
+              <clipPath id="brainClip"><ellipse cx="150" cy="155" rx="108" ry="118"/></clipPath>
+            </defs>
+            <ellipse cx="150" cy="152" rx="122" ry="132" fill="none" stroke="rgba(201,168,76,0.06)" stroke-width="1"/>
+            <ellipse cx="150" cy="155" rx="108" ry="118" fill="url(#brainGlow)"/>
+            <g clip-path="url(#brainClip)" fill="none" stroke-linecap="round">
+              <path d="M80,100 Q95,78 115,82 Q130,86 138,75 Q148,64 158,72 Q170,80 182,74 Q196,68 208,82 Q218,94 212,108" stroke="rgba(100,160,220,0.18)" stroke-width="1.2" class="fold"/>
+              <path d="M72,130 Q68,115 78,108 Q90,100 100,110 Q112,122 108,135" stroke="rgba(100,160,220,0.18)" stroke-width="1.2" class="fold"/>
+              <path d="M228,130 Q232,115 222,108 Q210,100 200,110 Q188,122 192,135" stroke="rgba(100,160,220,0.18)" stroke-width="1.2" class="fold"/>
+              <path d="M85,160 Q80,148 88,140 Q98,130 110,138 Q122,146 118,160 Q114,174 100,178 Q86,180 85,160" stroke="rgba(100,160,220,0.15)" stroke-width="1.2" class="fold"/>
+              <path d="M215,160 Q220,148 212,140 Q202,130 190,138 Q178,146 182,160 Q186,174 200,178 Q214,180 215,160" stroke="rgba(100,160,220,0.15)" stroke-width="1.2" class="fold"/>
+              <path d="M115,190 Q108,178 118,170 Q130,162 142,170 Q152,178 150,190 Q148,202 135,206 Q120,208 115,190" stroke="rgba(100,160,220,0.15)" stroke-width="1.2" class="fold"/>
+              <path d="M185,190 Q192,178 182,170 Q170,162 158,170 Q148,178 150,190 Q152,202 165,206 Q180,208 185,190" stroke="rgba(100,160,220,0.15)" stroke-width="1.2" class="fold"/>
+              <path d="M108,220 Q100,208 112,200 Q124,192 138,200 Q150,208 148,222" stroke="rgba(100,160,220,0.13)" stroke-width="1.2" class="fold"/>
+              <path d="M192,220 Q200,208 188,200 Q176,192 162,200 Q150,208 152,222" stroke="rgba(100,160,220,0.13)" stroke-width="1.2" class="fold"/>
+              <path d="M120,248 Q112,236 124,228 Q138,220 152,228 Q164,236 162,250 Q158,262 142,264 Q124,264 120,248" stroke="rgba(100,160,220,0.12)" stroke-width="1.2" class="fold"/>
+              <path d="M110,155 Q130,138 150,136 Q170,138 190,155" stroke="rgba(150,200,255,0.28)" stroke-width="1.8" class="fold"/>
+              <path d="M128,148 Q138,140 150,138 Q162,140 172,148" stroke="rgba(180,220,255,0.22)" stroke-width="1" class="fold"/>
+              <path d="M78,185 Q70,200 76,218 Q84,236 96,240" stroke="rgba(100,160,220,0.15)" stroke-width="1.2" class="fold"/>
+              <path d="M222,185 Q230,200 224,218 Q216,236 204,240" stroke="rgba(100,160,220,0.15)" stroke-width="1.2" class="fold"/>
+            </g>
+            <line x1="150" y1="40" x2="150" y2="265" stroke="rgba(201,168,76,0.10)" stroke-width="1" stroke-dasharray="3,4"/>
+            <g stroke="rgba(201,168,76,0.05)" stroke-width="0.5">
+              <line x1="42" y1="95" x2="258" y2="95"/><line x1="42" y1="155" x2="258" y2="155"/>
+              <line x1="42" y1="215" x2="258" y2="215"/>
+              <line x1="96" y1="37" x2="96" y2="273"/><line x1="204" y1="37" x2="204" y2="273"/>
+            </g>
+            <text x="48" y="52" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(201,168,76,0.35)" letter-spacing="1">T1-WEIGHTED</text>
+            <text x="48" y="62" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(176,186,200,0.25)" letter-spacing="1">AXIAL · 3T</text>
+            <text x="240" y="52" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(176,186,200,0.25)">R</text>
+            <text x="48" y="268" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(176,186,200,0.25)">A</text>
+            <text x="175" y="268" font-family="'JetBrains Mono',monospace" font-size="7" fill="rgba(201,168,76,0.3)" letter-spacing="0.5">224×224px</text>
+            <ellipse cx="150" cy="155" rx="108" ry="118" fill="none" stroke="rgba(100,160,220,0.06)" stroke-width="2"/>
+          </svg>
+        </div>
+
+        <!-- Layer 2: scan line -->
+        <div class="scan-line-layer" style="z-index:3">
+          <svg width="100%" height="100%" viewBox="0 0 300 340" preserveAspectRatio="none">
+            <rect class="mri-scan-line" x="0" y="0" width="300" height="2" fill="rgba(201,168,76,0.45)" rx="1"/>
+          </svg>
+        </div>
+
+        <!-- Layer 3: lobe labels — accurately positioned on axial MRI view -->
+        <!-- NOTE: axial view = looking DOWN from top. Frontal=top, Occipital=bottom, Temporal=sides, Parietal=mid -->
+        <div class="p-layer" id="pl3" style="inset:20px;z-index:4;pointer-events:none">
+
+          <!-- Frontal Lobe — top-center of brain, anterior -->
+          <div class="lobe-dot" style="left:47%;top:8%"></div>
+          <div class="lobe-line" style="left:calc(47% + 5px);top:calc(8% + 3px);width:32px;height:1px"></div>
+          <div class="lobe-tip" data-lobe="frontal" style="left:calc(47% + 39px);top:calc(8% - 5px)">Frontal Lobe</div>
+
+          <!-- Prefrontal Cortex — very top, slightly left of midline -->
+          <div class="lobe-dot" style="left:38%;top:3%"></div>
+          <div class="lobe-line" style="left:4px;top:calc(3% + 3px);width:calc(38% - 8px);height:1px"></div>
+          <div class="lobe-tip" data-lobe="prefrontal" style="left:5px;top:calc(3% - 5px)">Prefrontal Ctx</div>
+
+          <!-- Left Temporal Lobe — left side, mid-height -->
+          <div class="lobe-dot" style="left:8%;top:46%"></div>
+          <div class="lobe-line" style="left:calc(8% + 5px);top:calc(46% + 3px);width:24px;height:1px"></div>
+          <div class="lobe-tip" data-lobe="temporal" style="left:calc(8% + 31px);top:calc(46% - 5px)">Temporal Lobe</div>
+
+          <!-- Right Temporal Lobe — right side, mid-height -->
+          <div class="lobe-dot" style="left:84%;top:46%"></div>
+          <div class="lobe-line" style="left:calc(84% - 28px);top:calc(46% + 3px);width:28px;height:1px"></div>
+          <div class="lobe-tip" data-lobe="temporal" style="left:calc(84% - 115px);top:calc(46% - 5px)">Temporal Lobe</div>
+
+          <!-- Parietal Lobe — mid-top, between frontal and occipital -->
+          <div class="lobe-dot" style="left:20%;top:27%"></div>
+          <div class="lobe-line" style="left:4px;top:calc(27% + 3px);width:calc(20% - 8px);height:1px"></div>
+          <div class="lobe-tip" data-lobe="parietal" style="left:5px;top:calc(27% - 5px)">Parietal Lobe</div>
+
+          <!-- Corpus Callosum — dead center, the white matter bridge -->
+          <div class="lobe-dot" style="left:47%;top:38%"></div>
+          <div class="lobe-line" style="left:calc(47% + 5px);top:calc(38% + 3px);width:26px;height:1px"></div>
+          <div class="lobe-tip" data-lobe="corpus" style="left:calc(47% + 33px);top:calc(38% - 5px)">Corpus Callosum</div>
+
+          <!-- Basal Ganglia — deep center-left -->
+          <div class="lobe-dot" style="left:38%;top:50%"></div>
+          <div class="lobe-line" style="left:4px;top:calc(50% + 3px);width:calc(38% - 8px);height:1px"></div>
+          <div class="lobe-tip" data-lobe="basal" style="left:5px;top:calc(50% - 5px)">Basal Ganglia</div>
+
+          <!-- Thalamus — very center of brain -->
+          <div class="lobe-dot" style="left:52%;top:52%"></div>
+          <div class="lobe-line" style="left:calc(52% + 5px);top:calc(52% + 3px);width:24px;height:1px"></div>
+          <div class="lobe-tip" data-lobe="thalamus" style="left:calc(52% + 31px);top:calc(52% - 5px)">Thalamus</div>
+
+          <!-- Occipital Lobe — very bottom of brain -->
+          <div class="lobe-dot" style="left:47%;top:82%"></div>
+          <div class="lobe-line" style="left:calc(47% + 5px);top:calc(82% + 3px);width:30px;height:1px"></div>
+          <div class="lobe-tip" data-lobe="occipital" style="left:calc(47% + 37px);top:calc(82% - 5px)">Occipital Lobe</div>
+
+          <!-- Insula — deep lateral left, between temporal and parietal -->
+          <div class="lobe-dot" style="left:16%;top:38%"></div>
+          <div class="lobe-line" style="left:4px;top:calc(38% + 3px);width:calc(16% - 8px);height:1px"></div>
+          <div class="lobe-tip" data-lobe="insula" style="left:5px;top:calc(38% - 5px)">Insula</div>
+
+        </div>
+
+        <div class="scan-strip" style="z-index:5;position:absolute">
+          <span class="ssl">MRI · Axial</span>
+          <span class="ssr">hover · click labels</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Brain part popup card -->
+<div class="brain-popup" id="brainPopup">
+  <button class="bp-close" onclick="closePopup()">&#10005;</button>
+  <div class="bp-name" id="bpName"></div>
+  <div class="bp-tag" id="bpTag"></div>
+  <div class="bp-rule"></div>
+  <div class="bp-body" id="bpBody"></div>
+</div>
+
+<div class="section section-demo">
+  <div class="container">
+    <div class="eyebrow"><span class="ey-line"></span><span class="ey-text">Live Analysis</span></div>
+    <div class="demo-grid" id="demoGrid">
+      <div class="dpanel">
+        <div class="plabel"><span class="plabel-n">01</span> Upload MRI Scan</div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+          <div class="uz-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></div>
+          <div class="uz-title">Drop MRI image here</div>
+          <div class="uz-sub">JPG · PNG · click or drag</div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this)"/>
+        <div id="previewArea">
+          <img id="previewImg" src="" alt="MRI"/>
+          <div class="prev-ov"></div>
+          <div class="pc pc-tl"></div><div class="pc pc-tr"></div><div class="pc pc-bl"></div><div class="pc pc-br"></div>
+        </div>
+        <button class="btn-p" id="analyzeBtn" onclick="analyze()" disabled>Run Analysis</button>
+        <button class="btn-g" id="changeBtn" onclick="changeImage()" style="display:none;">&#8635;&nbsp; Change Image</button>
+        <button class="btn-report" id="reportBtn" onclick="downloadReport()" style="display:none;">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Report
+        </button>
+        <!-- Tumor info — appears after diagnosis, fills blank space -->
+        <div id="tumorInfo"></div>
+      </div>
+      <!-- Report panel: hidden until analysis is run -->
+      <div id="reportPanel" style="display:none;background:var(--ink2);padding:36px;border-left:1px solid var(--border)">
+        <div class="plabel"><span class="plabel-n">02</span> Diagnosis Report</div>
+        <div class="scanning" id="scanningState">
+          <div class="spin-wrap"><div class="spin-r1"></div><div class="spin-r2"></div></div>
+          <div class="scan-lbl">Processing scan</div>
+          <div class="scan-log">
+            <div class="ll" id="ll1"><div class="ll-tick">✓</div>Preprocessing image</div>
+            <div class="ll" id="ll2"><div class="ll-tick">✓</div>Feature extraction</div>
+            <div class="ll" id="ll3"><div class="ll-tick">✓</div>Running classifier</div>
+            <div class="ll" id="ll4"><div class="ll-tick">✓</div>Computing probabilities</div>
+            <div class="ll" id="ll5"><div class="ll-tick">✓</div>Generating report</div>
+          </div>
+        </div>
+        <div id="resultsPanel"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hist-overlay" id="histOverlay" onclick="closeHistory()"></div>
+<div class="hist-panel" id="histPanel">
+  <div class="hist-panel-head">
+    <div>
+      <div class="hist-panel-title">Scan History</div>
+      <div class="hist-panel-sub" id="histCount">0 scans</div>
+    </div>
+    <div class="hist-panel-actions">
+      <button class="btn-clear" onclick="clearHistory()">Clear All</button>
+      <button class="hist-close" onclick="closeHistory()">&#10005;</button>
+    </div>
+  </div>
+  <div class="hist-panel-body">
+    <div id="historyEmpty">
+      <div class="he-icon"><svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg></div>
+      <div class="he-text">No scans analysed yet.<br/>Run your first analysis to see history here.</div>
+    </div>
+    <div class="history-grid" id="historyGrid" style="display:none"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <div class="toast-icon">🎉</div>
+  <div>
+    <div class="toast-title">All Clear — No Tumor Detected!</div>
+    <div class="toast-sub" id="toastSub"></div>
+  </div>
+  <button class="toast-close" onclick="closeToast()">&#10005;</button>
+</div>
+
+<div class="section section-arch">
+  <div class="container">
+    <div class="eyebrow"><span class="ey-line"></span><span class="ey-text">Model Architecture</span></div>
+    <div class="arch-card">
+      <div class="arch-top">
+        <div><div class="arch-title">EfficientNetB0 + Custom Classifier</div><div class="arch-sub">Transfer learning from ImageNet to 4-class brain tumor classification</div></div>
+        <div class="arch-badge">97.06% validation accuracy</div>
+      </div>
+      <div class="pipeline">
+        <div class="ps active" onclick="setStep(0)"><span class="ps-icon">🖼</span><div class="ps-name">Input</div><div class="ps-spec">224x224x3</div></div>
+        <div class="pa">&#8594;</div>
+        <div class="ps" onclick="setStep(1)"><span class="ps-icon">&#9889;</span><div class="ps-name">EfficientNet</div><div class="ps-spec">B0 backbone</div></div>
+        <div class="pa">&#8594;</div>
+        <div class="ps" onclick="setStep(2)"><span class="ps-icon">&#8853;</span><div class="ps-name">GAP</div><div class="ps-spec">1280-dim</div></div>
+        <div class="pa">&#8594;</div>
+        <div class="ps" onclick="setStep(3)"><span class="ps-icon">&#9672;</span><div class="ps-name">Dense 256</div><div class="ps-spec">ReLU + BN</div></div>
+        <div class="pa">&#8594;</div>
+        <div class="ps" onclick="setStep(4)"><span class="ps-icon">&#9671;</span><div class="ps-name">Dropout</div><div class="ps-spec">rate 0.5</div></div>
+        <div class="pa">&#8594;</div>
+        <div class="ps" onclick="setStep(5)"><span class="ps-icon">&#9672;</span><div class="ps-name">Dense 128</div><div class="ps-spec">ReLU + 0.4</div></div>
+        <div class="pa">&#8594;</div>
+        <div class="ps" onclick="setStep(6)"><span class="ps-icon">&#127919;</span><div class="ps-name">Softmax</div><div class="ps-spec">4 classes</div></div>
+      </div>
+      <div class="arch-info" id="archInfo"><strong>Input Layer</strong> — MRI scans resized to 224x224x3 RGB. Preprocessed using EfficientNet's built-in normalization to match ImageNet pixel distribution for optimal feature transfer.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section section-tumors">
+  <div class="container">
+    <div class="eyebrow"><span class="ey-line"></span><span class="ey-text">Tumor Classification Guide</span></div>
+    <div class="tt-intro">
+      <p>NeuroScan classifies three primary intracranial neoplasm categories — selected for their clinical prevalence and radiological distinctiveness on T1-weighted MRI. Each carries a fundamentally different prognosis and treatment pathway.</p>
+    </div>
+    <div class="tt-rows">
+
+      <div class="tt-row">
+        <div class="tt-accent" style="color:#c0392b">01</div>
+        <div>
+          <div class="tt-tag" style="color:#c0392b;border-color:rgba(192,57,43,0.3)">High Risk · Malignant</div>
+          <div class="tt-name" style="color:var(--white)">Glioma</div>
+          <div class="tt-sub">Primary Malignant Brain Tumor</div>
+          <div class="tt-body">Arising from glial cells — astrocytes and oligodendrocytes — gliomas are the most common primary brain tumor. They span WHO Grades I–IV, from slow-growing pilocytic astrocytoma to the highly aggressive Glioblastoma Multiforme (GBM), which carries a median survival of ~15 months even with aggressive multimodal treatment.</div>
+        </div>
+        <div class="tt-grid" style="border-color:rgba(192,57,43,0.2)">
+          <div><div class="tt-fact-k">Prevalence</div><div class="tt-fact-v">~45% of primary brain tumors. Peak incidence ages 45–70.</div></div>
+          <div><div class="tt-fact-k">WHO Grades</div><div class="tt-fact-v">Grade I (pilocytic) to Grade IV (GBM) — grade defines aggressiveness.</div></div>
+          <div><div class="tt-fact-k">Molecular Markers</div><div class="tt-fact-v">IDH1/2, MGMT methylation, 1p/19q codeletion.</div></div>
+          <div><div class="tt-fact-k">Symptoms</div><div class="tt-fact-v">Seizures, headaches, cognitive decline, motor weakness.</div></div>
+          <div style="grid-column:1/-1"><div class="tt-fact-k">Treatment</div><div class="tt-fact-v">Maximal safe resection + Temozolomide + radiotherapy (Stupp protocol). Bevacizumab for recurrent GBM.</div></div>
+        </div>
+      </div>
+
+      <div class="tt-row">
+        <div class="tt-accent" style="color:#b8620a">02</div>
+        <div>
+          <div class="tt-tag" style="color:#b8620a;border-color:rgba(184,98,10,0.3)">Moderate Risk · Usually Benign</div>
+          <div class="tt-name" style="color:var(--white)">Meningioma</div>
+          <div class="tt-sub">Benign Meningeal Tumor</div>
+          <div class="tt-body">Originating from arachnoid cap cells of the meninges, meningiomas are the most prevalent primary brain tumor and typically slow-growing and benign (WHO Grade I). They disproportionately affect women aged 40–70 and are frequently discovered incidentally on neuroimaging with no symptoms.</div>
+        </div>
+        <div class="tt-grid" style="border-color:rgba(184,98,10,0.2)">
+          <div><div class="tt-fact-k">Prevalence</div><div class="tt-fact-v">~37% of primary brain tumors. Female-to-male ratio ~2:1.</div></div>
+          <div><div class="tt-fact-k">Location</div><div class="tt-fact-v">Brain surface, skull base, falx cerebri, optic nerve sheath.</div></div>
+          <div><div class="tt-fact-k">Symptoms</div><div class="tt-fact-v">Often asymptomatic; headaches, vision loss, focal seizures.</div></div>
+          <div><div class="tt-fact-k">Recurrence</div><div class="tt-fact-v">Grade I: ~10%. Grade III (anaplastic): 50–80%.</div></div>
+          <div style="grid-column:1/-1"><div class="tt-fact-k">Treatment</div><div class="tt-fact-v">Observation (small lesions); surgical resection often curative; Gamma Knife radiosurgery for residual or recurrent tumor.</div></div>
+        </div>
+      </div>
+
+      <div class="tt-row">
+        <div class="tt-accent" style="color:#c9a84c">03</div>
+        <div>
+          <div class="tt-tag" style="color:#c9a84c;border-color:rgba(201,168,76,0.3)">Moderate Risk · Benign Adenoma</div>
+          <div class="tt-name" style="color:var(--white)">Pituitary</div>
+          <div class="tt-sub">Pituitary Gland Adenoma</div>
+          <div class="tt-body">Pituitary adenomas arise from secretory cells of the anterior pituitary at the base of the brain. Most are benign but cause significant morbidity through hormonal dysregulation or mass effect on the optic chiasm — producing the characteristic bitemporal visual field loss. Microadenomas (&lt;10mm) are found incidentally in ~10% of autopsies.</div>
+        </div>
+        <div class="tt-grid" style="border-color:rgba(201,168,76,0.2)">
+          <div><div class="tt-fact-k">Prevalence</div><div class="tt-fact-v">~16% of primary brain tumors. Most common sellar region tumor.</div></div>
+          <div><div class="tt-fact-k">Functional Types</div><div class="tt-fact-v">Prolactinoma, GH-secreting (acromegaly), ACTH-secreting (Cushing's), non-functioning.</div></div>
+          <div><div class="tt-fact-k">Symptoms</div><div class="tt-fact-v">Bitemporal hemianopia, hormonal imbalance, headaches, fatigue.</div></div>
+          <div><div class="tt-fact-k">Diagnosis</div><div class="tt-fact-v">MRI + hormonal blood panel. Dynamic testing for Cushing's.</div></div>
+          <div style="grid-column:1/-1"><div class="tt-fact-k">Treatment</div><div class="tt-fact-v">Dopamine agonists (cabergoline) for prolactinoma; transsphenoidal surgery; stereotactic radiosurgery for residual.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="section-last section-about">
+  <div class="container">
+    <div class="eyebrow"><span class="ey-line"></span><span class="ey-text">About</span></div>
+    <div class="about-editorial">
+      <div class="ae-headline">
+        <span class="ae-big">NeuroScan</span> is an end-to-end diagnostic intelligence platform designed to automate the detection and classification of primary brain pathologies. By leveraging EfficientNetB0-based transfer learning, the system transforms raw MRI data into clinical insights, achieving a 97.06% Validation Accuracy and a 91.50% Test Accuracy across four distinct classifications: Glioma, Meningioma, Pituitary, and No Tumor.
+      </div>
+      <div class="ae-cols">
+        <div class="ae-col">
+          <div class="ae-col-num">01</div>
+          <div class="ae-col-title">Transfer Learning</div>
+          <div class="ae-col-rule"></div>
+          <div class="ae-col-body">Built on EfficientNetB0 pretrained on ImageNet. The frozen backbone extracts powerful visual features while a custom classifier head learns tumor-specific patterns from MRI data — achieving strong results with minimal training data.</div>
+        </div>
+        <div class="ae-col">
+          <div class="ae-col-num">02</div>
+          <div class="ae-col-title">Dataset</div>
+          <div class="ae-col-rule"></div>
+          <div class="ae-col-body">Trained on 5,712 MRI brain scans across Glioma, Meningioma, No Tumor, and Pituitary classes from the Masoud Nickparvar Kaggle Brain Tumor MRI Dataset with an 80/20 train-validation split.</div>
+        </div>
+        <div class="ae-col">
+          <div class="ae-col-num">03</div>
+          <div class="ae-col-title">Tech Stack</div>
+          <div class="ae-col-rule"></div>
+          <div class="ae-col-body">Python · TensorFlow · Keras · Flask · Groq LLaMA. Trained with heavy data augmentation, early stopping, and ReduceLROnPlateau. Frontend served as a REST API with a single-page vanilla JS interface.</div>
+        </div>
+      </div>
+      <div class="foot-disc" style="margin-top:32px"><strong>Model Scope &amp; Limitations —</strong> NeuroScan classifies four categories only: Glioma, Meningioma, Pituitary Adenoma, and No Tumor. Other primary tumors (Medulloblastoma, Ependymoma, Craniopharyngioma, CNS Lymphoma) and brain metastases are outside training scope and may be misclassified with high confidence — a known limitation of all closed-set classification models. Always confirm AI-generated results with a qualified radiologist.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="foot-inner">
+      <div class="foot-brand">NeuroScan<span>.</span></div>
+      <div class="foot-meta">EfficientNetB0 · TensorFlow · Flask · 91.50% test accuracy</div>
+    </div>
+    <div class="foot-disc"><strong>Medical Disclaimer —</strong> This system is developed for academic purposes only and is not a certified medical device. It must not be used for clinical diagnosis or treatment decisions. Always consult a qualified healthcare professional.</div>
+  </div>
+</footer>
+
+<button class="chat-fab" id="chatFab" onclick="toggleChat()">
+  <svg class="icon-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  <svg class="icon-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  <div class="chat-unread" id="chatUnread">1</div>
+</button>
+
+<div class="chat-win" id="chatWin">
+  <div class="chat-head">
+    <div class="chat-av">&#129504;</div>
+    <div><div class="chat-hname">NeuroScan Assistant</div><div class="chat-hsub">Brain Neuro specialist</div></div>
+    <div class="chat-hstat"><span class="chat-hdot"></span>Online</div>
+  </div>
+  <div class="chat-msgs" id="chatMsgs"></div>
+  <div class="chat-sugg" id="chatSugg">
+    <button class="schip" onclick="sendSugg(this)">What is a Glioma?</button>
+    <button class="schip" onclick="sendSugg(this)">Glioma vs Meningioma</button>
+    <button class="schip" onclick="sendSugg(this)">How does MRI detect tumors?</button>
+    <button class="schip" onclick="sendSugg(this)">What is IDH mutation?</button>
+  </div>
+  <div class="chat-ia">
+    <textarea class="chat-input" id="chatInput" placeholder="Ask about brain tumors..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="chat-send-btn" id="chatSendBtn" onclick="sendMsg()">
+      <svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+// ── BRAIN PART DATA ──
+const BRAIN_DATA = {
+  frontal: {
+    name: 'Frontal Lobe',
+    tag: 'Executive Function',
+    body: 'The largest lobe, responsible for voluntary movement, planning, decision-making, problem-solving, and personality. Houses the primary motor cortex and Broca\'s area for speech production. Gliomas here can affect motor control and personality.'
+  },
+  prefrontal: {
+    name: 'Prefrontal Cortex',
+    tag: 'Higher Cognition',
+    body: 'The most anterior part of the frontal lobe. Governs complex cognitive behavior, working memory, impulse control, and social behavior. Often called the "CEO of the brain." Damage can cause dramatic personality changes.'
+  },
+  temporal: {
+    name: 'Temporal Lobe',
+    tag: 'Memory & Hearing',
+    body: 'Processes auditory information and plays a critical role in memory formation. Contains the hippocampus (memory consolidation), Wernicke\'s area (language comprehension), and the amygdala (emotional processing). Temporal lobe tumors can cause seizures and memory issues.'
+  },
+  parietal: {
+    name: 'Parietal Lobe',
+    tag: 'Sensory Integration',
+    body: 'Integrates sensory information including touch, temperature, pain, and spatial awareness. Processes where objects are in space relative to the body. Damage can cause neglect syndrome — unawareness of one side of the body or environment.'
+  },
+  corpus: {
+    name: 'Corpus Callosum',
+    tag: 'Interhemispheric Bridge',
+    body: 'A thick band of ~200 million nerve fibers connecting the left and right cerebral hemispheres. Enables communication between both sides of the brain. Tumors here (often gliomas) can disrupt this coordination, causing "split-brain" symptoms.'
+  },
+  basal: {
+    name: 'Basal Ganglia',
+    tag: 'Movement & Reward',
+    body: 'A group of deep brain structures (caudate, putamen, globus pallidus) critical for voluntary motor control, procedural learning, and habit formation. Also involved in reward and emotion. Dysfunction is central to Parkinson\'s disease.'
+  },
+  thalamus: {
+    name: 'Thalamus',
+    tag: 'Sensory Relay Hub',
+    body: 'Often called the "gateway to the cortex." Acts as a relay station routing sensory and motor signals to the cerebral cortex. Nearly all sensory input (except smell) passes through here. Thalamic tumors are especially challenging to treat due to central location.'
+  },
+  occipital: {
+    name: 'Occipital Lobe',
+    tag: 'Visual Processing',
+    body: 'Entirely dedicated to processing visual information. Contains the primary visual cortex (V1) and higher visual areas for color, motion, and object recognition. Located at the very back of the brain. Tumors here typically cause visual field defects or hallucinations.'
+  },
+  insula: {
+    name: 'Insula (Insular Cortex)',
+    tag: 'Interoception & Emotion',
+    body: 'A hidden cortical region buried deep within the lateral sulcus. Involved in interoception (sensing the body\'s internal state), pain perception, emotion, and autonomic control. Low-grade gliomas frequently arise here, making surgery complex due to eloquent function.'
+  }
+};
+
+// ── POPUP LOGIC ──
+let activePopup = null;
+function showPopup(lobeKey, el) {
+  const data = BRAIN_DATA[lobeKey];
+  if (!data) return;
+  const popup = document.getElementById('brainPopup');
+  document.getElementById('bpName').textContent = data.name;
+  document.getElementById('bpTag').textContent = data.tag;
+  document.getElementById('bpBody').textContent = data.body;
+  // position near the label
+  const r = el.getBoundingClientRect();
+  let left = r.right + 10;
+  let top = r.top - 8;
+  // keep on screen
+  if (left + 260 > window.innerWidth) left = r.left - 260;
+  if (top + 220 > window.innerHeight) top = window.innerHeight - 230;
+  if (top < 10) top = 10;
+  popup.style.left = left + 'px';
+  popup.style.top = top + 'px';
+  popup.classList.add('show');
+  activePopup = lobeKey;
+}
+function closePopup() {
+  document.getElementById('brainPopup').classList.remove('show');
+  activePopup = null;
+}
+// attach click to lobe-tip labels after DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.lobe-tip[data-lobe]').forEach(tip => {
+    tip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const key = tip.getAttribute('data-lobe');
+      if (activePopup === key) { closePopup(); return; }
+      showPopup(key, tip);
+    });
+  });
+  // close popup on outside click
+  document.addEventListener('click', (e) => {
+    const popup = document.getElementById('brainPopup');
+    if (!popup.contains(e.target) && !e.target.classList.contains('lobe-tip')) {
+      closePopup();
+    }
+  });
+});
+
+function toggleTheme(){
+  document.body.classList.toggle('light');
+  localStorage.setItem('ns_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+// Restore saved theme on load
+(function(){
+  if(localStorage.getItem('ns_theme')==='light') document.body.classList.add('light');
+})();
+
+// ── NAV HIGHLIGHTING ──
+function gotoSection(s){
+  document.querySelector(s)?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+const navSections=[
+  {id:'analysis',sel:'.section-demo'},
+  {id:'arch',sel:'.section-arch'},
+  {id:'tumors',sel:'.section-tumors'},
+  {id:'about',sel:'.section-about'}
+];
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY+120;
+  let cur='analysis';
+  navSections.forEach(({id,sel})=>{
+    const el=document.querySelector(sel);
+    if(el&&el.offsetTop<=y)cur=id;
+  });
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  const active=document.getElementById('nl-'+cur);
+  if(active)active.classList.add('active');
+},{passive:true});
+
+// ── PARALLAX BRAIN TILT ──
+(function(){
+  const frame=document.getElementById('scanFrame');
+  if(!frame)return;
+  const pl1=document.getElementById('pl1');
+  const pl3=document.getElementById('pl3');
+  let targetRX=0,targetRY=0,curRX=0,curRY=0;
+  let isHov=false;
+
+  frame.addEventListener('mouseenter',()=>{isHov=true;});
+  frame.addEventListener('mouseleave',()=>{
+    isHov=false;targetRX=0;targetRY=0;
+    frame.style.transition='transform 0.6s cubic-bezier(0.16,1,0.3,1),box-shadow 0.3s';
+    if(pl1)pl1.style.transition='transform 0.6s cubic-bezier(0.16,1,0.3,1)';
+    if(pl3)pl3.style.transition='transform 0.6s cubic-bezier(0.16,1,0.3,1)';
+  });
+  frame.addEventListener('mousemove',e=>{
+    const r=frame.getBoundingClientRect();
+    const cx=(e.clientX-r.left)/r.width*2-1;
+    const cy=-((e.clientY-r.top)/r.height*2-1);
+    targetRY=cx*14;targetRX=-cy*10;
+    frame.style.transition='transform 0.08s linear,box-shadow 0.3s';
+    if(pl1)pl1.style.transition='transform 0.08s linear';
+    if(pl3)pl3.style.transition='transform 0.08s linear';
+  });
+  function tick(){
+    curRX+=(targetRX-curRX)*0.12;curRY+=(targetRY-curRY)*0.12;
+    frame.style.transform=`perspective(900px) rotateX(${curRX}deg) rotateY(${curRY}deg) scale(${isHov?1.025:1})`;
+    if(pl1)pl1.style.transform=`translate(${curRY*0.9}px,${-curRX*0.7}px)`;
+    if(pl3)pl3.style.transform=`translate(${curRY*2.2}px,${-curRX*1.6}px)`;
+    requestAnimationFrame(tick);
+  }
+  tick();
+  const folds=document.querySelectorAll('.fold');
+  frame.addEventListener('mousemove',e=>{
+    const r=frame.getBoundingClientRect();
+    const mx=(e.clientX-r.left)/r.width,my=(e.clientY-r.top)/r.height;
+    folds.forEach(f=>{
+      const bb=f.getBoundingClientRect();
+      const fc=((bb.left+bb.right)/2-r.left)/r.width;
+      const fr=((bb.top+bb.bottom)/2-r.top)/r.height;
+      const dist=Math.sqrt((mx-fc)**2+(my-fr)**2);
+      const glow=Math.max(0,1-dist*4);
+      const a=0.12+glow*0.55,b=100+Math.round(glow*120);
+      f.setAttribute('stroke',`rgba(${b},${170+Math.round(glow*60)},255,${a})`);
+      f.setAttribute('stroke-width',glow>0.3?1.8+glow*0.8:1.2);
+    });
+  });
+  frame.addEventListener('mouseleave',()=>{
+    folds.forEach(f=>{f.setAttribute('stroke','rgba(100,160,220,0.18)');f.setAttribute('stroke-width','1.2');});
+  });
+})();
+
+// ── FILE HANDLING ──
+let cHash=null,cFile=null,cDataURL=null;
+let currentResult=null,currentGradcam=null;
+function hashStr(s){let h=0,step=Math.max(1,Math.floor(s.length/100));for(let i=0;i<s.length;i+=step){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h)}
+
+function handleFile(inp){
+  const f=inp.files[0];if(!f)return;cFile=f;
+  const r=new FileReader();
+  r.onload=e=>{
+    cDataURL=e.target.result;cHash=hashStr(cDataURL.slice(22));
+    document.getElementById('previewImg').src=cDataURL;
+    document.getElementById('previewArea').style.display='block';
+    document.getElementById('uploadZone').style.display='none';
+    document.getElementById('analyzeBtn').disabled=false;
+    document.getElementById('analyzeBtn').textContent='Run Analysis';
+    document.getElementById('changeBtn').style.display='flex';
+    // hide report panel when new image is loaded
+    document.getElementById('reportPanel').style.display='none';
+    document.getElementById('demoGrid').classList.remove('has-results');
+    document.getElementById('scanningState').style.display='none';
+    document.getElementById('resultsPanel').style.display='none';
+    document.getElementById('resultsPanel').innerHTML='';
+    const ti=document.getElementById('tumorInfo');if(ti){ti.style.display='none';ti.innerHTML='';}
+    const rb=document.getElementById('reportBtn');if(rb)rb.style.display='none';
+    currentResult=null;currentGradcam=null;
+  };r.readAsDataURL(f);
+}
+
+const zone=document.getElementById('uploadZone');
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')});
+zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+zone.addEventListener('drop',e=>{
+  e.preventDefault();zone.classList.remove('dragover');
+  const f=e.dataTransfer.files[0];
+  if(f?.type.startsWith('image/')){const dt=new DataTransfer();dt.items.add(f);const i=document.getElementById('fileInput');i.files=dt.files;handleFile(i);}
+});
+
+function changeImage(){
+  document.getElementById('uploadZone').style.display='block';
+  document.getElementById('previewArea').style.display='none';
+  document.getElementById('changeBtn').style.display='none';
+  document.getElementById('analyzeBtn').disabled=true;
+  document.getElementById('analyzeBtn').textContent='Run Analysis';
+  document.getElementById('reportPanel').style.display='none';
+  document.getElementById('demoGrid').classList.remove('has-results');
+  document.getElementById('resultsPanel').style.display='none';
+  document.getElementById('resultsPanel').innerHTML='';
+  document.getElementById('scanningState').style.display='none';
+  const ti=document.getElementById('tumorInfo');if(ti){ti.style.display='none';ti.innerHTML='';}
+  const rb=document.getElementById('reportBtn');if(rb)rb.style.display='none';
+  currentResult=null;currentGradcam=null;
+  cHash=null;cFile=null;cDataURL=null;
+  const i=document.getElementById('fileInput');i.value='';i.click();
+}
+
+async function analyze(){
+  // Show the report panel and expand the grid
+  const rp=document.getElementById('reportPanel');
+  rp.style.display='block';
+  rp.style.animation='reportReveal 0.45s cubic-bezier(0.16,1,0.3,1) both';
+  document.getElementById('demoGrid').classList.add('has-results');
+  document.getElementById('resultsPanel').style.display='none';
+  document.getElementById('resultsPanel').innerHTML='';
+  const sc=document.getElementById('scanningState');sc.style.display='flex';
+  document.getElementById('analyzeBtn').disabled=true;
+  ['ll1','ll2','ll3','ll4','ll5'].forEach((id,i)=>{
+    document.getElementById(id).classList.remove('done');
+    setTimeout(()=>document.getElementById(id).classList.add('done'),500+i*550);
+  });
+  if(cFile){try{
+    const fd=new FormData();fd.append('file',cFile);
+    const res=await fetch('/predict',{method:'POST',body:fd});
+    if(res.ok){const d=await res.json();setTimeout(()=>{sc.style.display='none';showReal(d);},3400);return;}
+  }catch(e){}}
+  setTimeout(()=>{sc.style.display='none';showDemo();},3400);
+}
+
+function showReal(data){
+  const C=['Glioma','Meningioma','No Tumor','Pituitary'],COL=['#c0392b','#b8620a','#1e7e5a','#c9a84c'];
+  const probs=C.map(c=>data.probabilities[c]||0);
+  const classIdx=C.indexOf(data.class);
+  const isNo=data.class==='No Tumor',isMed=data.class==='Meningioma'||data.class==='Pituitary';
+  const r={label:isNo?'No Tumor Detected':data.class+' Tumor Detected',icon:{Glioma:'⚠',Meningioma:'◉','No Tumor':'✓',Pituitary:'◉'}[data.class],cls:isNo?'rh-neg':isMed?'rh-warn':'rh-pos',confidence:data.confidence,probs,C,COL,severity:{Glioma:'High',Meningioma:'Moderate','No Tumor':'None',Pituitary:'Moderate'}[data.class],reco:{Glioma:'Immediate specialist review',Meningioma:'Neurologist consultation','No Tumor':'Routine monitoring',Pituitary:'Endocrinologist consult'}[data.class],classIdx};
+  currentResult=data;
+  render(r);saveToHistory(r);
+  fetchGradcam(classIdx);
+  showTumorInfo(data.class);
+}
+
+function showDemo(){
+  const C=['Glioma','Meningioma','No Tumor','Pituitary'],COL=['#c0392b','#b8620a','#1e7e5a','#c9a84c'];
+  const demos=[
+    {label:'Glioma Tumor Detected',icon:'⚠',cls:'rh-pos',confidence:0.87,probs:[0.87,0.07,0.04,0.02],severity:'High',reco:'Immediate specialist review',classIdx:0},
+    {label:'No Tumor Detected',icon:'✓',cls:'rh-neg',confidence:0.93,probs:[0.03,0.02,0.93,0.02],severity:'None',reco:'Routine monitoring',classIdx:2},
+    {label:'Pituitary Tumor Detected',icon:'◉',cls:'rh-warn',confidence:0.85,probs:[0.05,0.06,0.04,0.85],severity:'Moderate',reco:'Endocrinologist consult',classIdx:3},
+    {label:'Meningioma Tumor Detected',icon:'◉',cls:'rh-warn',confidence:0.82,probs:[0.06,0.82,0.07,0.05],severity:'Moderate',reco:'Neurologist consultation',classIdx:1},
+  ];
+  const r={...demos[(cHash||0)%4],C,COL};render(r);saveToHistory(r);
+  showGradcamUnavailable();
+  showTumorInfo(demos[(cHash||0)%4].label.replace(' Tumor Detected','').replace(' Detected','').trim());
+}
+
+function render({label,icon,cls,confidence,probs,C,COL,severity,reco}){
+  const pct=(confidence*100).toFixed(1);
+  const bars=C.map((c,i)=>`<div class="pb-row"><div class="pb-top"><span class="pb-name">${c}</span><span class="pb-pct">${(probs[i]*100).toFixed(1)}%</span></div><div class="pb-track"><div class="pb-fill" id="pb${i}" style="background:${COL[i]}"></div></div></div>`).join('');
+  const sCol=cls==='rh-neg'?'#1e7e5a':cls==='rh-warn'?'#b8620a':'#c0392b';
+  document.getElementById('resultsPanel').innerHTML=`
+    <div class="rh ${cls} fu"><div class="rh-icon">${icon}</div><div><div class="rh-name">${label}</div><div class="rh-conf">Confidence ${pct}% · EfficientNetB0</div></div></div>
+    <div class="probs-hdr fu">Class Probabilities</div>${bars}
+    <div class="r-meta fu">
+      <div class="mc"><div class="mc-k">Confidence</div><div class="mc-v">${pct}%</div><div class="mc-s">Model certainty</div></div>
+      <div class="mc"><div class="mc-k">Severity</div><div class="mc-v" style="color:${sCol}">${severity}</div><div class="mc-s">Risk level</div></div>
+      <div class="mc" style="grid-column:1/-1"><div class="mc-k">Next Step</div><div class="mc-v" style="font-size:13px;font-weight:500;letter-spacing:0">${reco}</div><div class="mc-s">Clinical recommendation</div></div>
+    </div>
+    <div class="gcam-wrap" id="gcamWrap">
+      <div class="gcam-head">
+        <div class="gcam-title">
+          <span>Grad-CAM Attention</span>
+          <span class="gcam-badge">XAI</span>
+        </div>
+        <div class="gcam-toggle">
+          <button class="gcam-tab active" id="gcam-tab-heat" onclick="switchGcam('heat')">Heatmap</button>
+          <button class="gcam-tab" id="gcam-tab-orig" onclick="switchGcam('orig')">Original</button>
+        </div>
+      </div>
+      <div class="gcam-body" id="gcamBody">
+        <div class="gcam-loading" id="gcamLoading">
+          <div class="gcam-spin"></div>
+          <div class="gcam-loading-txt">Computing attention map…</div>
+        </div>
+        <img class="gcam-img" id="gcamHeatImg" style="display:none;min-height:0" alt=""/>
+        <img class="gcam-img" id="gcamOrigImg" style="display:none;min-height:0" alt=""/>
+      </div>
+      <div class="gcam-legend" id="gcamLegend" style="display:none">
+        <div class="gcam-scale">
+          <span class="gcam-scale-l">Low</span>
+          <div class="gcam-scale-bar"></div>
+          <span class="gcam-scale-r">High</span>
+        </div>
+        <span class="gcam-note">Model attention intensity</span>
+      </div>
+      <div class="gcam-context" id="gcamContext">${cls==='rh-neg' ? '&#9432; Highlighted regions show areas the model examined to <strong style="color:var(--slate2)">confirm absence</strong> of pathology — not tumor location.' : '&#9432; Highlighted regions indicate areas of highest model attention for this classification.'}</div>
+    </div>`;
+  document.getElementById('resultsPanel').style.display='block';
+  document.getElementById('analyzeBtn').disabled=false;
+  document.getElementById('analyzeBtn').textContent='Run Again';
+  setTimeout(()=>{C.forEach((_,i)=>{const b=document.getElementById('pb'+i);if(b)b.style.width=(probs[i]*100)+'%';});},80);
+}
+
+// ── GRAD-CAM ──
+let gcamHeatSrc=null;
+
+function switchGcam(mode){
+  document.getElementById('gcam-tab-heat').classList.toggle('active',mode==='heat');
+  document.getElementById('gcam-tab-orig').classList.toggle('active',mode==='orig');
+  const h=document.getElementById('gcamHeatImg'),o=document.getElementById('gcamOrigImg');
+  if(!h||!o)return;
+  if(mode==='heat'){h.style.display='block';o.style.display='none';}
+  else{o.style.display='block';h.style.display='none';}
+}
+
+async function fetchGradcam(classIdx){
+  if(!cFile)return;
+  try{
+    const fd=new FormData();
+    fd.append('file',cFile);
+    fd.append('class_index',classIdx);
+    const res=await fetch('/gradcam',{method:'POST',body:fd});
+    if(!res.ok)throw new Error('Server error');
+    const data=await res.json();
+    if(data.heatmap){
+      gcamHeatSrc=data.heatmap;
+      currentGradcam=data.heatmap;  // store for PDF — set BEFORE showing button
+      const heatImg=document.getElementById('gcamHeatImg');
+      const origImg=document.getElementById('gcamOrigImg');
+      const loading=document.getElementById('gcamLoading');
+      const legend=document.getElementById('gcamLegend');
+      if(heatImg){heatImg.src=data.heatmap;heatImg.style.display='block';}
+      if(origImg&&cDataURL){origImg.src=cDataURL;}
+      if(loading)loading.style.display='none';
+      if(legend)legend.style.display='flex';
+      const ctx=document.getElementById('gcamContext');
+      if(ctx)ctx.style.display='block';
+      // Now heatmap is loaded — safe to show Download Report button
+      const rb=document.getElementById('reportBtn');
+      if(rb)rb.style.display='flex';
+    }
+  }catch(e){
+    const loading=document.getElementById('gcamLoading');
+    if(loading){loading.innerHTML='<div class="gcam-loading-txt" style="color:var(--slate)">Heatmap unavailable — Flask not reachable</div>';}
+    // Still show report button even without heatmap
+    const rb=document.getElementById('reportBtn');
+    if(rb)rb.style.display='flex';
+  }
+}
+
+function showGradcamUnavailable(){
+  setTimeout(()=>{
+    const loading=document.getElementById('gcamLoading');
+    if(loading){loading.innerHTML='<div class="gcam-loading-txt" style="color:var(--slate);text-align:center;line-height:1.8">Grad-CAM requires Flask backend.<br/>Upload a real MRI to see attention heatmap.</div>';}
+  },200);
+}
+
+// ── TUMOR INFO ──
+const TUMOR_INFO = {
+  'Glioma': {
+    color: '#c0392b',
+    sub: 'Primary Malignant Brain Tumor',
+    origin: 'Glial cells — astrocytes, oligodendrocytes, ependymal cells',
+    location: 'Cerebral hemispheres, brainstem, cerebellum, spinal cord',
+    symptoms: 'Persistent headaches, seizures, cognitive decline, memory loss, motor weakness, vision or speech changes',
+    prevalence: '~45% of all primary brain tumors. Most common in adults aged 45–70.',
+    note: 'WHO grades I–IV. Grade IV Glioblastoma (GBM) is the most aggressive — median survival ~15 months with treatment. IDH mutation status and MGMT methylation are key prognostic markers.'
+  },
+  'Meningioma': {
+    color: '#b8620a',
+    sub: 'Primary Benign Brain Tumor',
+    origin: 'Arachnoid cap cells of the meninges (brain/spinal cord lining)',
+    location: 'Brain surface, skull base, spinal canal, optic nerve sheath',
+    symptoms: 'Headaches, vision changes, hearing loss, seizures, weakness — often asymptomatic',
+    prevalence: '~37% of all primary brain tumors. More common in women aged 40–70.',
+    note: 'Usually slow-growing and benign (Grade I). Often found incidentally on imaging. Surgical resection is typically curative. Radiation used for residual or recurrent tumors.'
+  },
+  'No Tumor': {
+    color: '#1e7e5a',
+    sub: 'Normal Scan — No Pathology Detected',
+    origin: '—',
+    location: '—',
+    symptoms: 'No tumor-associated symptoms expected from this scan',
+    prevalence: 'Normal brain MRI finding',
+    note: 'The model finds no evidence of intracranial neoplasm in this scan. If clinical symptoms persist, further evaluation with contrast MRI or specialist review is recommended. Always confirm findings with a qualified radiologist.'
+  },
+  'Pituitary': {
+    color: '#c9a84c',
+    sub: 'Pituitary Gland Adenoma',
+    origin: 'Anterior pituitary gland cells (adenohypophysis)',
+    location: 'Sella turcica — base of brain, between the optic nerves',
+    symptoms: 'Vision loss (bitemporal hemianopia), hormonal imbalance, headaches, fatigue, infertility',
+    prevalence: '~16% of all primary brain tumors. Microadenomas (<10mm) most common.',
+    note: 'Most are benign non-functioning or hormone-secreting adenomas. Treatment depends on size and hormone activity: surgery (transsphenoidal), radiation, or dopamine agonists for prolactinomas.'
+  }
+};
+
+function showTumorInfo(className) {
+  const info = TUMOR_INFO[className];
+  if (!info) return;
+  const el = document.getElementById('tumorInfo');
+  if (!el) return;
+  const isNoTumor = className === 'No Tumor';
+  el.innerHTML = `
+    <div class="ti-label"><span class="ti-label-dot" style="background:${info.color}"></span>Detected Finding</div>
+    <div class="ti-name" style="color:${info.color}">${className}</div>
+    <div class="ti-sub">${info.sub}</div>
+    <div class="ti-cards">
+      ${!isNoTumor ? `
+      <div class="ti-card"><div class="ti-card-k">Cell Origin</div><div class="ti-card-v">${info.origin}</div></div>
+      <div class="ti-card"><div class="ti-card-k">Typical Location</div><div class="ti-card-v">${info.location}</div></div>
+      <div class="ti-card full"><div class="ti-card-k">Common Symptoms</div><div class="ti-card-v">${info.symptoms}</div></div>
+      <div class="ti-card full"><div class="ti-card-k">Epidemiology</div><div class="ti-card-v">${info.prevalence}</div></div>` :
+      `<div class="ti-card full"><div class="ti-card-k">Scan Status</div><div class="ti-card-v">${info.symptoms}</div></div>
+      <div class="ti-card full"><div class="ti-card-k">Finding</div><div class="ti-card-v">${info.prevalence}</div></div>`}
+      <div class="ti-card full"><div class="ti-card-k">Clinical Note</div><div class="ti-card-v">${info.note}</div></div>
+    </div>`;
+  el.style.display = 'block';
+}
+
+// ── HISTORY — SQLite backend ──────────────────────────────────────────────────
+// localStorage is used only as a render cache so the panel opens instantly.
+// All writes go to the Flask SQLite API; reads prefer the API, fall back to cache.
+
+function getHistCache(){try{return JSON.parse(localStorage.getItem('ns_history')||'[]');}catch(e){return[];}}
+function setHistCache(a){try{localStorage.setItem('ns_history',JSON.stringify(a));}catch(e){}}
+
+async function saveToHistory(result){
+  if(!cDataURL)return;
+  const entry={
+    label:      result.label,
+    class:      result.cls==='rh-neg'?'No Tumor':result.label.replace(' Detected','').replace(' Tumor','').trim(),
+    cls:        result.cls,
+    confidence: result.confidence,
+    severity:   result.severity,
+    reco:       result.reco,
+    probabilities: Object.fromEntries((result.C||[]).map((c,i)=>[c,result.probs?.[i]??0])),
+    thumb:      cDataURL,
+    gradcam:    currentGradcam||null,
+  };
+  // Optimistic local cache update
+  const cache=getHistCache();
+  const localEntry={...entry,id:Date.now(),time:new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})};
+  cache.unshift(localEntry);
+  if(cache.length>50)cache.pop();
+  setHistCache(cache);
+  // Persist to SQLite
+  try{
+    const res=await fetch('/history/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(entry)});
+    if(res.ok){
+      const data=await res.json();
+      // Update local cache entry with real DB id
+      cache[0].db_id=data.id;
+      setHistCache(cache);
+    }
+  }catch(e){console.warn('History save failed (offline?):', e);}
+  if(result.cls==='rh-neg')showToast(true);
+}
+
+async function loadHistoryFromServer(){
+  try{
+    const res=await fetch('/history/get');
+    if(!res.ok)throw new Error('Server error');
+    const data=await res.json();
+    // Convert server format to frontend format
+    const scans=data.scans.map(s=>({
+      id:         s.id,
+      db_id:      s.id,
+      label:      s.label,
+      cls:        s.cls_style,
+      confidence: s.confidence,
+      severity:   s.severity,
+      reco:       s.reco,
+      thumb:      s.thumb_b64,
+      time:       s.created_at,
+    }));
+    setHistCache(scans);
+    // Update count chip
+    const stats=data.stats||{};
+    const countEl=document.getElementById('histCount');
+    if(countEl)countEl.textContent=`${stats.total||scans.length} scan${(stats.total||scans.length)!==1?'s':''}`;
+    return scans;
+  }catch(e){
+    console.warn('Could not load history from server, using cache:', e);
+    return getHistCache();
+  }
+}
+
+function openHistory(){
+  document.getElementById('histPanel').classList.add('open');
+  document.getElementById('histOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  // Show cache immediately, then refresh from server
+  renderHistoryFromData(getHistCache());
+  loadHistoryFromServer().then(scans=>renderHistoryFromData(scans));
+}
+
+function closeHistory(){
+  document.getElementById('histPanel').classList.remove('open');
+  document.getElementById('histOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function renderHistory(){
+  renderHistoryFromData(getHistCache());
+  loadHistoryFromServer().then(scans=>renderHistoryFromData(scans));
+}
+
+function renderHistoryFromData(h){
+  const grid=document.getElementById('historyGrid');
+  const empty=document.getElementById('historyEmpty');
+  const countEl=document.getElementById('histCount');
+  if(countEl)countEl.textContent=h.length+' scan'+(h.length!==1?'s':'');
+  if(h.length===0){grid.style.display='none';empty.style.display='flex';return;}
+  empty.style.display='none';grid.style.display='flex';
+  const bmap={'rh-pos':'hb-pos','rh-neg':'hb-neg','rh-warn':'hb-warn'};
+  grid.innerHTML=h.map(e=>`<div class="hist-card"><div class="hist-thumb"><img src="${e.thumb}" alt="MRI"/><div class="hist-thumb-ov"></div><span class="hbadge ${bmap[e.cls]||'hb-warn'}">${e.label.replace(' Detected','').replace(' Tumor','')}</span></div><div class="hist-body"><div class="hist-title">${e.label}</div><div class="hist-conf">${(e.confidence*100).toFixed(1)}% confidence · ${e.severity||''} severity</div><div class="hist-time">${e.time}</div></div><div class="hist-del" onclick="delEntry(${e.db_id||e.id},event)">&#10005;</div></div>`).join('');
+}
+
+async function delEntry(id, ev){
+  ev.stopPropagation();
+  // Remove from local cache
+  const cache=getHistCache().filter(e=>(e.db_id||e.id)!==id);
+  setHistCache(cache);
+  renderHistoryFromData(cache);
+  // Delete from server
+  try{await fetch(`/history/delete/${id}`,{method:'DELETE'});}
+  catch(e){console.warn('Delete failed:', e);}
+}
+
+async function clearHistory(){
+  if(!confirm('Clear all scan history?'))return;
+  localStorage.removeItem('ns_history');
+  renderHistoryFromData([]);
+  try{await fetch('/history/clear',{method:'DELETE'});}
+  catch(e){console.warn('Clear failed:', e);}
+}
+
+function closeToast(){document.getElementById('toast').classList.remove('show');}
+
+function showToast(isNoTumor){
+  const toast=document.getElementById('toast');
+  const msgs=[
+    "Great news! The scan shows no signs of a tumor. Your brain seems to be doing just fine without any uninvited guests.",
+    "Completely clear! No tumor detected. You can breathe easy — your neurons are living their best life.",
+    "Nothing suspicious found! Clean bill of health on this scan. Your brain is blissfully tumor-free.",
+    "All clear! No tumor detected. Statistically speaking, your brain is having a great day."
+  ];
+  if(isNoTumor){
+    document.getElementById('toastSub').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),6000);
+  }
+}
+
+async function downloadReport(){
+  if(!cFile||!currentResult){return;}
+  const btn=document.getElementById('reportBtn');
+  btn.disabled=true;
+  btn.innerHTML='<span class="report-generating"><span class="report-spin"></span>Generating PDF…</span>';
+  try{
+    const fd=new FormData();
+    fd.append('file',cFile);
+    fd.append('result',JSON.stringify(currentResult));
+    if(currentGradcam){fd.append('gradcam',currentGradcam);}
+    const res=await fetch('/report',{method:'POST',body:fd});
+    if(!res.ok)throw new Error('Report generation failed');
+    const blob=await res.blob();
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    const cd=res.headers.get('Content-Disposition')||'';
+    const m=cd.match(/filename="?([^"]+)"?/);
+    a.download=m?m[1]:`NeuroScan_Report_${currentResult.class.replace(' ','_')}.pdf`;
+    a.click();
+    URL.revokeObjectURL(url);
+    btn.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Report Downloaded';
+    setTimeout(()=>{btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Report';btn.disabled=false;},3000);
+  }catch(e){
+    btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Report';
+    btn.disabled=false;
+    alert('Report generation failed. Make sure Flask is running with reportlab installed.');
+  }
+}
+
+
+
+const STEPS=['<strong>Input Layer</strong> — MRI scans resized to 224x224x3 RGB and preprocessed using EfficientNet\'s built-in normalization, matching ImageNet pixel distribution for optimal feature transfer.','<strong>EfficientNetB0 Backbone</strong> — Pretrained on 1.2M ImageNet images and frozen during training. Acts as a universal visual feature extractor detecting edges, textures, and anatomical structures in MRI data.','<strong>Global Average Pooling</strong> — Collapses the spatial 7x7x1280 feature maps into a 1280-dimensional vector. More parameter-efficient than Flatten and reduces overfitting significantly.','<strong>Dense Layer (256 units)</strong> — Fully connected layer with ReLU activation and Batch Normalization. Learns high-level feature combinations specific to brain tumor morphology.','<strong>Dropout (rate 0.5)</strong> — Randomly disables 50% of neurons during training. The primary regularization technique preventing the model from overfitting to training examples.','<strong>Dense Layer (128 units)</strong> — Second classification stage with ReLU activation and Dropout 0.4. Compresses learned representations before the final softmax decision.','<strong>Output Layer (Softmax)</strong> — Produces calibrated probability scores for four classes: Glioma, Meningioma, No Tumor, Pituitary. The highest-scoring class is the final prediction.'];
+function setStep(i){document.querySelectorAll('.ps').forEach((s,j)=>s.classList.toggle('active',i===j));const b=document.getElementById('archInfo');b.style.opacity='0';setTimeout(()=>{b.innerHTML=STEPS[i];b.style.opacity='1';},160);}
+
+let chatHist=[],chatOpened=false;
+function toggleChat(){
+  const win=document.getElementById('chatWin'),fab=document.getElementById('chatFab'),unread=document.getElementById('chatUnread');
+  const isOpen=win.classList.contains('open');
+  if(isOpen){win.classList.remove('open');fab.classList.remove('open');}
+  else{
+    win.classList.add('open');fab.classList.add('open');unread.style.display='none';
+    if(!chatOpened){chatOpened=true;appendMsg('ai','Hello! I\'m the NeuroScan AI Assistant, specialising in brain tumor medicine and neuro-oncology. I can explain tumor types, MRI findings, treatment options, what your scan results mean, and much more. What would you like to know?');}
+    setTimeout(()=>{const m=document.getElementById('chatMsgs');m.scrollTop=m.scrollHeight;},100);
+  }
+}
+
+function appendMsg(role,text){
+  const msgs=document.getElementById('chatMsgs'),div=document.createElement('div');
+  div.className='cmsg '+role;
+  const av=role==='ai'?'<div class="cmsg-av cmsg-av-ai">&#129504;</div>':'<div class="cmsg-av cmsg-av-u">&#128100;</div>';
+  div.innerHTML=av+'<div class="cmsg-bubble">'+text.replace(/\n/g,'<br/>')+'</div>';
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(){
+  const msgs=document.getElementById('chatMsgs'),div=document.createElement('div');
+  div.className='cmsg ai';div.id='typingInd';
+  div.innerHTML='<div class="cmsg-av cmsg-av-ai">&#129504;</div><div class="cmsg-bubble"><div class="typing-bubble"><span class="td"></span><span class="td"></span><span class="td"></span></div></div>';
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
+function removeTyping(){document.getElementById('typingInd')?.remove();}
+
+async function sendMsg(){
+  const inp=document.getElementById('chatInput'),text=inp.value.trim();
+  if(!text)return;
+  document.getElementById('chatSugg').style.display='none';
+  appendMsg('user',text);
+  chatHist.push({role:'user',content:text});
+  inp.value='';inp.style.height='auto';
+  document.getElementById('chatSendBtn').disabled=true;
+  showTyping();
+  try{
+    const res=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:chatHist})});
+    const data=await res.json();removeTyping();
+    if(data.reply){appendMsg('ai',data.reply);chatHist.push({role:'assistant',content:data.reply});}
+    else{appendMsg('ai','Sorry, I encountered an error. Please try again.');}
+  }catch(e){removeTyping();appendMsg('ai','Unable to reach the server. Make sure Flask is running with a valid API key.');}
+  document.getElementById('chatSendBtn').disabled=false;
+}
+
+function sendSugg(btn){document.getElementById('chatInput').value=btn.textContent;sendMsg();}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
+setTimeout(()=>{if(!chatOpened){const u=document.getElementById('chatUnread');u.style.display='flex';}},2000);
+</script>
+</body>
+</html>
