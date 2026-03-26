@@ -1,13 +1,12 @@
----
+ï»¿---
 title: Neuroscan
-emoji: ??
 colorFrom: blue
 colorTo: red
 sdk: docker
 pinned: false
 ---
 
-# NeuroScan — AI Brain Tumour Detection
+# NeuroScan - AI Brain Tumour Detection
 
 EfficientNetB0-based MRI classifier. Detects Glioma, Meningioma, Pituitary Adenoma, and No Tumor.
 
