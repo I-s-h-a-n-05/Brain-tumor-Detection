@@ -224,7 +224,7 @@ def generate_report(scan_image_pil, predicted_class, confidence,
     c.drawString(MARGIN, footer_rule_y - 12, 'REPORTING SYSTEM')
     c.setFont('Helvetica', 7)
     c.setFillColor(MID_GRAY)
-    c.drawString(MARGIN, footer_rule_y - 22, 'NeuroScan Diagnostic System v3.0')
+    c.drawString(MARGIN, footer_rule_y - 22, 'NeuroScan Diagnostic System v4.0')
     c.drawString(MARGIN, footer_rule_y - 32, f'Generated: {ts_display}')
     c.drawString(MARGIN, footer_rule_y - 42, f'Report ID: {rid}')
 
@@ -435,9 +435,9 @@ def generate_report(scan_image_pil, predicted_class, confidence,
         y = _sec(c, y, '06', 'SYSTEM & TECHNICAL DETAILS')
         tech = [
             ('Classification System', 'EfficientNetB0 — Transfer Learning (ImageNet pretrained)'),
-            ('Training Data',         'Brain Tumour MRI Dataset (Kaggle) — 5,712 scans'),
+            ('Training Data',         'Brain Tumour MRI Dataset — 13,305 scans (Kaggle + Mendeley combined)'),
             ('Output Classes',        'Glioma / Meningioma / No Tumour / Pituitary Adenoma'),
-            ('Performance',           'Val. Accuracy: 97.06%  |  Test Accuracy: 91.50%  |  Macro F1: 0.9129'),
+            ('Performance',           'Val. Accuracy: 97.02%  |  Test Accuracy: 93.48%  |  Macro F1: 0.9388'),
             ('Explainability',        'Gradient-weighted Class Activation Mapping (Grad-CAM)'),
             ('Serving Framework',     'TensorFlow 2.13 / Keras  |  Flask REST API'),
         ]

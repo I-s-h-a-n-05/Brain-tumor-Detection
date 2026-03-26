@@ -21,7 +21,7 @@ app = Flask(__name__)
 init_db()
 
 # ── MODEL DOWNLOAD (runs once on Render if model not present) ─────────────────
-MODEL_PATH    = 'brain_tumor_model_v3.h5'
+MODEL_PATH    = 'brain_tumor_model_v4.h5'
 GDRIVE_FILE_ID = '1DKX80GGmB8vt5N12WDSu3X-Jjh4u56Pj'
 
 def download_model_from_gdrive(file_id: str, dest: str):
@@ -66,7 +66,7 @@ if not os.path.exists(MODEL_PATH):
 # ── MODEL LOAD ────────────────────────────────────────────────────────────────
 for model_path in [
     MODEL_PATH,
-    'brain_tumor_model_finetuned.h5',
+    'brain_tumor_model_v3.h5',
     'brain_tumor_model.keras',
 ]:
     if os.path.exists(model_path):
@@ -93,7 +93,7 @@ SYSTEM_PROMPT = """You are NeuroScan AI Assistant, an expert in neuro-oncology a
 - Treatment: surgery (craniotomy, stereotactic biopsy, awake surgery), radiotherapy (WBRT, SRS, Gamma Knife), chemotherapy (Temozolomide, Bevacizumab), immunotherapy, targeted therapy
 - Prognosis and survival statistics for each tumor type
 - Molecular markers: IDH1/2 mutation, MGMT methylation, EGFR amplification, 1p/19q codeletion, TERT promoter mutation
-- The NeuroScan model: EfficientNetB0 transfer learning, 5712 MRI scans, 97.06% validation accuracy, 4 classes
+- The NeuroScan model: EfficientNetB0 transfer learning, 13,305 MRI scans (combined dataset), 97.02% validation accuracy, 93.48% test accuracy, 4 classes
 
 Your communication style:
 - Speak like a knowledgeable, warm doctor explaining to a patient or curious student
