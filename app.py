@@ -9,7 +9,7 @@ import numpy as np
 from PIL import Image
 import tensorflow as tf
 from tensorflow.keras.applications.efficientnet import preprocess_input
-from groq import Groq
+import cohere
 
 from gradcam import generate_gradcam
 from report import generate_report
@@ -20,52 +20,9 @@ app = Flask(__name__)
 # ── DATABASE ──────────────────────────────────────────────────────────────────
 init_db()
 
-# ── MODEL DOWNLOAD (runs once on Render if model not present) ─────────────────
-MODEL_PATH    = 'brain_tumor_model_v4.h5'
-GDRIVE_FILE_ID = '1DKX80GGmB8vt5N12WDSu3X-Jjh4u56Pj'
-
-def download_model_from_gdrive(file_id: str, dest: str):
-    """Download a large file from Google Drive, handling the virus-scan warning."""
-    print(f"Downloading model from Google Drive → {dest} ...")
-    session = requests.Session()
-    url = f'https://drive.google.com/uc?export=download&id={file_id}'
-    response = session.get(url, stream=True)
-
-    # Google redirects large files through a confirmation page
-    for key, value in response.cookies.items():
-        if key.startswith('download_warning'):
-            url = f'https://drive.google.com/uc?export=download&id={file_id}&confirm={value}'
-            response = session.get(url, stream=True)
-            break
-
-    # Also handle newer Google Drive confirmation via HTML token
-    if 'text/html' in response.headers.get('Content-Type', ''):
-        import re
-        token_match = re.search(r'confirm=([0-9A-Za-z_\-]+)', response.text)
-        if token_match:
-            confirm = token_match.group(1)
-            url = f'https://drive.google.com/uc?export=download&id={file_id}&confirm={confirm}'
-            response = session.get(url, stream=True)
-
-    total = int(response.headers.get('content-length', 0))
-    downloaded = 0
-    with open(dest, 'wb') as f:
-        for chunk in response.iter_content(chunk_size=32768):
-            if chunk:
-                f.write(chunk)
-                downloaded += len(chunk)
-                if total:
-                    pct = downloaded / total * 100
-                    print(f'\r  {pct:.1f}% ({downloaded/1e6:.1f} MB / {total/1e6:.1f} MB)',
-                          end='', flush=True)
-    print(f'\nModel downloaded successfully → {dest}')
-
-if not os.path.exists(MODEL_PATH):
-    download_model_from_gdrive(GDRIVE_FILE_ID, MODEL_PATH)
-
 # ── MODEL LOAD ────────────────────────────────────────────────────────────────
 for model_path in [
-    MODEL_PATH,
+    'brain_tumor_model_v4.h5',
     'brain_tumor_model_v3.h5',
     'brain_tumor_model.keras',
 ]:
@@ -80,9 +37,9 @@ else:
 
 CLASS_NAMES = ['Glioma', 'Meningioma', 'No Tumor', 'Pituitary']
 
-# ── GROQ ──────────────────────────────────────────────────────────────────────
-GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')
-groq_client = Groq(api_key=GROQ_API_KEY)
+# ── COHERE ────────────────────────────────────────────────────────────────────
+COHERE_API_KEY = os.environ.get('COHERE_API_KEY', '')
+cohere_client = cohere.ClientV2(api_key=COHERE_API_KEY)
 
 SYSTEM_PROMPT = """You are NeuroScan AI Assistant, an expert in neuro-oncology and brain tumor medicine. You have deep, comprehensive knowledge of:
 
@@ -275,12 +232,12 @@ def chat():
         return jsonify({'error': 'No messages provided'}), 400
     try:
         messages = [{"role": "system", "content": SYSTEM_PROMPT}] + data['messages']
-        response = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+        response = cohere_client.chat(
+            model="command-a-08-2025",
             messages=messages,
             max_tokens=1024,
         )
-        return jsonify({'reply': response.choices[0].message.content})
+        return jsonify({'reply': response.message.content[0].text})
     except Exception as e:
         print("CHAT ERROR:", str(e))
         return jsonify({'error': str(e)}), 500
