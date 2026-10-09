@@ -4,7 +4,7 @@ import cv2
 import base64
 from io import BytesIO
 from PIL import Image
-from tensorflow.keras.applications.efficientnet import preprocess_input
+from keras.applications.efficientnet import preprocess_input
 
 _grad_model = None
 

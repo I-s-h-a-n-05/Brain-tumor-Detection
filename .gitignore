@@ -25,6 +25,9 @@ finetune_v3_history.png
 metrics_report.txt
 brain_tumor_model_v3_history.png
 
+# Secrets
+.env
+
 # OS
 .DS_Store
 Thumbs.db

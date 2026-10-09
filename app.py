@@ -3,12 +3,14 @@ import io
 import json
 import requests
 from datetime import datetime
+from dotenv import load_dotenv
+load_dotenv()
 
 from flask import Flask, request, jsonify, render_template, send_file
 import numpy as np
 from PIL import Image
 import tensorflow as tf
-from tensorflow.keras.applications.efficientnet import preprocess_input
+from keras.applications.efficientnet import preprocess_input
 import cohere
 
 from gradcam import generate_gradcam
@@ -233,7 +235,7 @@ def chat():
     try:
         messages = [{"role": "system", "content": SYSTEM_PROMPT}] + data['messages']
         response = cohere_client.chat(
-            model="command-a-08-2025",
+            model="command-r-plus-08-2024",
             messages=messages,
             max_tokens=1024,
         )

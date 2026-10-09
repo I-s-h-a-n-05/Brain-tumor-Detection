@@ -1,8 +1,8 @@
 # predict.py — Run Inference on a New MRI Image
 import numpy as np
 import matplotlib.pyplot as plt
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
+from keras.models import load_model
+from keras.utils import load_img, img_to_array
 
 CLASSES = {
     0: 'Glioma Tumor',
@@ -18,8 +18,8 @@ def predict_tumor(img_path, model_path='best_model.h5'):
     model = load_model(model_path)
 
     # Preprocess image (same as training)
-    img = image.load_img(img_path, target_size=(224, 224))
-    img_array = image.img_to_array(img) / 255.0
+    img = load_img(img_path, target_size=(224, 224))
+    img_array = img_to_array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
 
     # Get predictions
