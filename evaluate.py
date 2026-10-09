@@ -8,7 +8,7 @@ Run from C:\\brain tumor\\ with venv active:
 import os
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.applications.efficientnet import preprocess_input
+from keras.applications.efficientnet import preprocess_input
 from PIL import Image
 import matplotlib
 matplotlib.use('Agg')  # no display needed
